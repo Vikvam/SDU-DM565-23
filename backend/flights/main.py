@@ -32,7 +32,7 @@ class QueryLeg:
 
 
 @dataclass
-class RequestCreate:
+class SkyscannerRequest:
     query_legs: [QueryLeg]
     market: str = "DK"
     locale: str = "da-DK"
@@ -51,15 +51,15 @@ class RequestCreate:
 
 
 class SkyscannerAPI:
-    def __init__(self, api_key):
-        self._base_url: str = "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search"
+
+    def __init__(self, api_key: str):
         self.__api_key: str = api_key
         self.session_token: str | None = None
         self.content: dict | None = None
 
-    def create_session(self, request: RequestCreate):
+    def create_session(self, request: SkyscannerRequest):
         response = requests.post(
-            f"{self._base_url}/create",
+            f"{self._BASE_URL}/create",
             headers={"x-api-key": self.__api_key},
             json={"query": request.asdict()}
         )
@@ -71,7 +71,7 @@ class SkyscannerAPI:
         if self.session_token is None:
             raise AssertionError("session_token is None, create a session before calling 'poll'")
         response = requests.post(
-            f"{self._base_url}/poll/{self.session_token}",
+            f"{self._BASE_URL}/poll/{self.session_token}",
             headers={"x-api-key": self.__api_key}
         )
         return response
@@ -87,9 +87,13 @@ class SkyscannerAPI:
         print(response_json)
         # TODO: handle results
 
+    def get(self, request: SkyscannerRequest):
+        self.create_session(request)
+        self.await_session()
+
 
 if __name__ == "__main__":
     api = SkyscannerAPI(API_KEY)
-    request_create = RequestCreate(query_legs=[QueryLeg("CPH", "BER", date(2023, 12, 1))])
-    api.create_session(request_create)
-    api.await_session()
+    request = SkyscannerRequest(query_legs=[QueryLeg("CPH", "BER", date(2023, 12, 1))])
+    api.get(request)
+
