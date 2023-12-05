@@ -1,7 +1,7 @@
 from google_route_finder import GoogleRouteFinder
 from props_reader import PropertiesReader
 
-PROPERTIES_FILE = "conf.properties"
+PROPERTIES_FILE = "../../conf.properties"
 
 start_address = "University of Southern Denmark, SDU"
 end_address = "ZOB Hamburg"
