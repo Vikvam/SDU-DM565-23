@@ -1,7 +1,7 @@
 .env
 
-.idea/
-.code/
+/.idea
+/.code
 
 # GOOGLE_MAPS_API_KEY
 conf.properties
