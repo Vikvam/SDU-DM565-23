@@ -25,6 +25,8 @@ async def search(search_data: SearchData):
     # print(from_name, to_name, departure)
     print(search_data)
 
+    return {"i": "am", "a": "response"}
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

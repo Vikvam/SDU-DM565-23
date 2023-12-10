@@ -16,6 +16,7 @@
             headers: {"Content-Type": "application/json"}
         })
         console.log(response);
+        if (response.status === 200) console.log(await response.json());
     }
 </script>
 
