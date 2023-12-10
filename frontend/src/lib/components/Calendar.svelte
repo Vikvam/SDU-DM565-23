@@ -5,17 +5,17 @@
     import { useFocusWithin } from '@svelteuidev/composables';
 
     export let label = "";
-    let value = new Date();
+    export let date = new Date();
 
     const [showCalendar, ref] = useFocusWithin();
 </script>
 
 
 <Flex use={[[ref]]} style="position: relative">
-    <TextInput label={label} disabled={$showCalendar} value={value.toLocaleDateString()}/>
+    <TextInput label={label} disabled={$showCalendar} value={date.toLocaleDateString()}/>
     <div class="popup">
         {#if $showCalendar}
-            <Month month={value} date={value} onChange={(val) => value = val} locale="en-gb" />
+            <Month month={date} date={date} onChange={(val) => date = val} locale="en-gb" />
         {/if}
     </div>
 </Flex>
