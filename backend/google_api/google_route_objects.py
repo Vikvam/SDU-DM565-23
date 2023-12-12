@@ -1,113 +1,31 @@
 from dataclasses import dataclass
-from enum import Enum, auto
+from datetime import datetime
 from typing import List
 
-
-@dataclass
-class Location:
-    latitude: int
-    longitude: int
+from money import Money
 
 
 @dataclass
-class TransitStop:
-    name: str
-    location: Location
-
-
-@dataclass
-class TransitStopDetails:
-    arrivalStop: List[TransitStop]
-    arrivalTime: str
-    departureStop: TransitStop
-    departureTime: str
-
-
-@dataclass
-class LocalizedText:
-    text: str
-    languageCode: str
-
-
-@dataclass
-class LocalizedTime:
-    time: LocalizedText
-    timeZone: str
-
-
-@dataclass
-class TransitDetailsLocalizedValues:
-    arrivalTime: LocalizedTime
-    departureTime: LocalizedTime
-
-
-@dataclass
-class TransitAgency:
-    name: str
-    phoneNumber: str
-    uri: str
-
-
-class TransitVehicleType(Enum):
-    TRANSIT_VEHICLE_TYPE_UNSPECIFIED = auto()
-    BUS = auto()
-    CABLE_CAR = auto()
-    COMMUTER_TRAIN = auto()
-    FERRY = auto()
-    FUNICULAR = auto()
-    GONDOLA_LIFT = auto()
-    HEAVY_RAIL = auto()
-    HIGH_SPEED_TRAIN = auto()
-    INTERCITY_BUS = auto()
-    LONG_DISTANCE_TRAIN = auto()
-    METRO_RAIL = auto()
-    MONORAIL = auto()
-    RAIL = auto()
-    SHARE_TAXI = auto()
-    SUBWAY = auto()
-    TRAM = auto()
-    TROLLEYBUS = auto()
-
-
-@dataclass
-class TransitVehicle:
-    name: LocalizedText
-    type: TransitVehicleType
-    iconUri: str
-    localIconUri: str
-
-
-@dataclass
-class TransitLine:
-    agencies: List[TransitAgency]
+class RouteLegTransitAgency:
     name: str
     uri: str
-    color: str
-    iconUri: str
-    nameShort: str
-    textColor: str
-    vehicle: TransitVehicle
 
 
 @dataclass
-class RouteLegStepTransitDetails:
-    stopDetails: TransitStopDetails
-    localizedValues: TransitDetailsLocalizedValues
-    headsing: str
-    headway: str
-    transitLine: TransitLine
-    stopCount: int
-    tripShortText: str
-
-
-@dataclass
-class RouteLegStep:
-    transitDetails: RouteLegStepTransitDetails
+class RouteLegTransitLine:
+    line_name: str
+    vehicle_type: str
+    transit_agencies: list[RouteLegTransitAgency]
 
 
 @dataclass
 class RouteLeg:
-    steps: List[RouteLegStep]
+    departure_place_name: str
+    arrival_place_name: str
+    departure_datetime: datetime
+    arrival_datatime: datetime
+    transit_line: RouteLegTransitLine
+    price: Money = None
 
 
 @dataclass
@@ -117,4 +35,6 @@ class Route:
 
 @dataclass
 class ResponseBody:
+    origin_address: str
+    destination_address: str
     routes: List[Route]
