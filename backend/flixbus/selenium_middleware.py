@@ -12,7 +12,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class SeleniumRequest(Request):
-    def __init__(self, wait_timeout=5, wait_until=None, screenshot=False, script=None, *args, **kwargs):
+    def __init__(self, wait_timeout=5, do_before=None, wait_until=None, screenshot=False, script=None, *args, **kwargs):
         """Initialize a new selenium request
         Parameters
         ----------
@@ -28,6 +28,7 @@ class SeleniumRequest(Request):
             JavaScript code to execute.
         """
         self.wait_timeout = wait_timeout
+        self.do_before = do_before
         self.wait_until = wait_until
         self.screenshot = screenshot
         self.script = script
@@ -63,12 +64,14 @@ class SeleniumMiddleware:
         crawler.signals.connect(middleware.spider_closed, signals.spider_closed)
         return middleware
 
-    def process_request(self, request: Request, spider: scrapy.Spider):
+    def process_request(self, request: Request, spider: scrapy.Spider) -> HtmlResponse:
         """Process a request using the selenium driver if applicable"""
         if not isinstance(request, SeleniumRequest): return None
         self.driver.get(request.url)
         for cookie_name, cookie_value in request.cookies.items():
             self.driver.add_cookie({"name": cookie_name, "value": cookie_value})
+        if request.do_before:
+            request.do_before(self.driver)
         if request.wait_until:
             WebDriverWait(self.driver, request.wait_timeout).until(request.wait_until)
         if request.screenshot:
