@@ -6,6 +6,8 @@ from google_route_objects import ResponseBody, RouteLegTransitAgency, RouteLegTr
 
 
 class GoogleRouteFinder:
+    datetime_format = "%Y-%m-%dT%H:%M:%SZ"
+
     request_headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": "",
@@ -19,8 +21,9 @@ class GoogleRouteFinder:
         "destination": {
             "address": ""
         },
+        "departureTime": "",
         "travelMode": "TRANSIT",
-        "computeAlternativeRoutes": "false",
+        "computeAlternativeRoutes": "true",
         "languageCode": "en-GB",
         "units": "METRIC"
     }
@@ -30,9 +33,10 @@ class GoogleRouteFinder:
     def __init__(self, api_key):
         self.request_headers["X-Goog-Api-Key"] = api_key
 
-    def find_routes(self, start_address, end_address):
+    def find_routes(self, start_address, end_address, departure_time):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
+        self.request_body["departureTime"] = departure_time.strftime(self.datetime_format)
 
         try:
             result = self._send_request()
@@ -130,7 +134,7 @@ class GoogleRouteFinder:
 
     @staticmethod
     def _convert_to_datetime(timestamp, localized_time):
-        date_time = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+        date_time = datetime.strptime(timestamp, GoogleRouteFinder.datetime_format)
         localized_time = date_time.strptime(localized_time, "%H:%M")
         date_time.replace(hour=localized_time.hour)
         return date_time
@@ -139,5 +143,5 @@ class GoogleRouteFinder:
     def _convert_transit_line_to_object(transit_line):
         line_name = transit_line['nameShort']
         vehicle_type = transit_line['vehicle']['name']['text']
-        transit_agencies = [RouteLegTransitAgency(**t) for t in transit_line['agencies']]
+        transit_agencies = [RouteLegTransitAgency(t['name'], t['uri']) for t in transit_line['agencies']]
         return RouteLegTransitLine(line_name, vehicle_type, transit_agencies)
