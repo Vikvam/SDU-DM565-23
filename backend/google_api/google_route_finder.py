@@ -2,7 +2,8 @@ from datetime import datetime
 
 import requests
 
-from google_route_objects import ResponseBody, RouteLegTransitAgency, RouteLegTransitLine, RouteLeg, Route
+from backend.google_api.google_route_objects import ResponseBody, RouteLegTransitAgency, RouteLegTransitLine, RouteLeg, \
+    Route
 
 
 class GoogleRouteFinder:
@@ -36,7 +37,7 @@ class GoogleRouteFinder:
     def find_routes(self, start_address, end_address, departure_time):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
-        self.request_body["departureTime"] = departure_time.strftime(self.datetime_format)
+        self.request_body["departureTime"] = departure_time
 
         try:
             result = self._send_request()

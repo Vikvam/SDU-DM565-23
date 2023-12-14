@@ -1,8 +1,14 @@
+import json
+
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from starlette.responses import JSONResponse
+
+from config import get_settings
+from google_api.google_route_finder import GoogleRouteFinder
 
 app = FastAPI()
 app.add_middleware(
@@ -13,19 +19,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
+
+
+def get_google_finder():
+    return google_finder
+
 
 class SearchData(BaseModel):
     from_name: str
     to_name: str
-    departure: str
+    departure_datetime: str
 
 
 @app.post("/search")
-async def search(search_data: SearchData):
-    # print(from_name, to_name, departure)
-    print(search_data)
+async def search(search_data: SearchData, finder=Depends(get_google_finder)):
+    result = finder.find_routes(search_data.from_name, search_data.to_name, search_data.departure_datetime)
+    json_result = jsonable_encoder(result)
 
-    return {"i": "am", "a": "response"}
+    return JSONResponse(content=json_result)
 
 
 if __name__ == "__main__":
