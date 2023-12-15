@@ -1,6 +1,9 @@
 from functools import lru_cache
 
+from dotenv import load_dotenv, find_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+load_dotenv(find_dotenv(".env"))
 
 
 class Settings(BaseSettings):
@@ -17,17 +20,23 @@ def get_settings():
 
 
 @lru_cache
-def get_crawler_process_settings():
+def get_basic_crawler_process_settings():
     return {
         "DOWNLOADER_MIDDLEWARES": {
             "backend.spiders.selenium_middleware.SeleniumMiddleware": 800,
         },
-        "ITEM_PIPELINES": {
-            "backend.spiders.pipelines.RoutePipeline": 800
-        },
-        "DOWNLOAD_DELAY": 2,
         "SELENIUM_DRIVER_NAME": get_settings().selenium_driver_name,
         "SELENIUM_DRIVER_EXECUTABLE_PATH": get_settings().selenium_driver_executable_path,
         "SELENIUM_DRIVER_ARGUMENTS": [],  # ["--headless"],
         "LOG_LEVEL": "WARNING",
     }
+
+
+@lru_cache
+def get_pipeline_crawler_process_settings():
+    settings = get_basic_crawler_process_settings()
+    settings["ITEM_PIPELINES"] = {
+        "backend.spiders.pipelines.RoutePipeline": 800
+    }
+
+    return settings

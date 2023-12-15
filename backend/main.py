@@ -6,11 +6,10 @@ from fastapi.encoders import jsonable_encoder
 from scrapy.crawler import CrawlerProcess
 from twisted.internet import defer, reactor
 
-from backend.config import get_settings, get_crawler_process_settings
-
+from backend.config import get_settings, get_pipeline_crawler_process_settings
 from backend.google_api.google_route_finder import GoogleRouteFinder
-from backend.spiders.flixbus_spider import FlixbusSpider, FlixbusRequest
-from backend.temp_result import result
+from backend.spiders.flixbus_spider import FlixbusSpider
+from backend.spiders.spider_base import SpiderRequest
 
 open_street_map_url = "https://nominatim.openstreetmap.org/search?"
 open_street_map_url_params = {
@@ -54,16 +53,15 @@ def get_place_official_name(place_name):
 
 @defer.inlineCallbacks
 def crawl(crawler_process, result):
-    should_c = True
     for route in result.routes:
         for step in route.legs:
             transport_agency_names = [i.name.lower() for i in step.transit_line.transit_agencies]
 
-            if "flixbus" in transport_agency_names and should_c:
+            if "flixbus" in transport_agency_names:
                 yield crawler_process.crawl(FlixbusSpider,
-                                            request=FlixbusRequest(step.departure_place_name,
-                                                                   step.arrival_place_name,
-                                                                   step.departure_datetime.date())
+                                            request=SpiderRequest(step.departure_place_name,
+                                                                  step.arrival_place_name,
+                                                                  step.departure_datetime.date())
                                             )
 
     reactor.stop()
@@ -85,7 +83,7 @@ if __name__ == "__main__":
         out.write(json_object.decode())
 
     crawler_process = CrawlerProcess(
-        get_crawler_process_settings()
+        get_pipeline_crawler_process_settings()
     )
 
     crawl(crawler_process, result)

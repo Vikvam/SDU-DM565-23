@@ -36,10 +36,7 @@
                             }
                         ]
                     },
-                    "price": {
-                        "amount": "19.99",
-                        "currency:": "EUR"
-                    }
+                    "price": null
                 }
             ]
         },
@@ -60,10 +57,7 @@
                             }
                         ]
                     },
-                    "price": {
-                        "amount": "19.99",
-                        "currency:": "EUR"
-                    }
+                    "price": null
                 }
             ]
         },
