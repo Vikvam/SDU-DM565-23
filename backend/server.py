@@ -1,5 +1,3 @@
-import json
-
 import uvicorn
 from fastapi import FastAPI, Depends
 from fastapi.encoders import jsonable_encoder

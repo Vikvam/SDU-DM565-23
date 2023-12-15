@@ -1,0 +1,290 @@
+{
+    "origin_address": "University of Southern Denmark, SDU",
+    "destination_address": "ZOB Hamburg",
+    "routes": [
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Campus Odense (Odense Letbane)",
+                    "arrival_place_name": "Parkering Odense Syd (Odense Letbane)",
+                    "departure_datetime": "2023-12-16T00:02:00",
+                    "arrival_datetime": "2023-12-16T00:08:00",
+                    "transit_line": {
+                        "line_name": "L",
+                        "vehicle_type": "Tram",
+                        "transit_agencies": [
+                            {
+                                "name": "Odense Letbane",
+                                "uri": "https://www.odenseletbane.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Parkering Odense Syd",
+                    "arrival_place_name": "ZOB Hamburg",
+                    "departure_datetime": "2023-12-16T00:15:00",
+                    "arrival_datetime": "2023-12-17T04:40:00",
+                    "transit_line": {
+                        "line_name": "FlixBus N98",
+                        "vehicle_type": "Bus",
+                        "transit_agencies": [
+                            {
+                                "name": "FlixBus",
+                                "uri": "https://global.flixbus.com/"
+                            }
+                        ]
+                    },
+                    "price": {
+                        "amount": "19.99",
+                        "currency:": "EUR"
+                    }
+                }
+            ]
+        },
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Parkering Odense Syd",
+                    "arrival_place_name": "ZOB Hamburg",
+                    "departure_datetime": "2023-12-16T00:15:00",
+                    "arrival_datetime": "2023-12-17T04:40:00",
+                    "transit_line": {
+                        "line_name": "FlixBus N98",
+                        "vehicle_type": "Bus",
+                        "transit_agencies": [
+                            {
+                                "name": "FlixBus",
+                                "uri": "https://global.flixbus.com/"
+                            }
+                        ]
+                    },
+                    "price": {
+                        "amount": "19.99",
+                        "currency:": "EUR"
+                    }
+                }
+            ]
+        },
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Campus Odense (Odense Letbane)",
+                    "arrival_place_name": "Odense Baneg\u00e5rd (Odense Letbane)",
+                    "departure_datetime": "2023-12-16T00:56:00",
+                    "arrival_datetime": "2023-12-17T01:14:00",
+                    "transit_line": {
+                        "line_name": "L",
+                        "vehicle_type": "Tram",
+                        "transit_agencies": [
+                            {
+                                "name": "Odense Letbane",
+                                "uri": "https://www.odenseletbane.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Odense st - Gleis 3",
+                    "arrival_place_name": "Hamburg Hbf",
+                    "departure_datetime": "2023-12-17T05:10:00",
+                    "arrival_datetime": "2023-12-17T09:48:00",
+                    "transit_line": {
+                        "line_name": "13401",
+                        "vehicle_type": "Long distance train",
+                        "transit_agencies": [
+                            {
+                                "name": "S J Industries",
+                                "uri": "https://www.sj.se/?l=en"
+                            }
+                        ]
+                    },
+                    "price": null
+                }
+            ]
+        },
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Campus Odense (Odense Letbane)",
+                    "arrival_place_name": "Odense Baneg\u00e5rd (Odense Letbane)",
+                    "departure_datetime": "2023-12-16T00:56:00",
+                    "arrival_datetime": "2023-12-17T01:14:00",
+                    "transit_line": {
+                        "line_name": "L",
+                        "vehicle_type": "Tram",
+                        "transit_agencies": [
+                            {
+                                "name": "Odense Letbane",
+                                "uri": "https://www.odenseletbane.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Odense st - Gleis 3",
+                    "arrival_place_name": "Fredericia",
+                    "departure_datetime": "2023-12-17T02:36:00",
+                    "arrival_datetime": "2023-12-17T03:07:00",
+                    "transit_line": {
+                        "line_name": "IC",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "DSB",
+                                "uri": "http://www.dsb.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Fredericia",
+                    "arrival_place_name": "Flensburg / Flensborg",
+                    "departure_datetime": "2023-12-17T06:45:00",
+                    "arrival_datetime": "2023-12-17T08:07:00",
+                    "transit_line": {
+                        "line_name": "IC",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "D\u00e4nische Staatsbahnen",
+                                "uri": "https://www.thetrainline.com/de/bahnunternehmen/dsb"
+                            },
+                            {
+                                "name": "DSB",
+                                "uri": "http://www.dsb.dk/"
+                            },
+                            {
+                                "name": "D\u00e4nische Staatsbahnen",
+                                "uri": "https://www.thetrainline.com/de/bahnunternehmen/dsb"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Flensburg / Flensborg",
+                    "arrival_place_name": "Hamburg Hbf",
+                    "departure_datetime": "2023-12-17T08:15:00",
+                    "arrival_datetime": "2023-12-17T10:14:00",
+                    "transit_line": {
+                        "line_name": "RE7",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "DB Regio AG",
+                                "uri": "http://www.bahn.de/"
+                            },
+                            {
+                                "name": "Hamburger Verkehrsverbund (hvv)",
+                                "uri": "http://www.hvv.de/"
+                            }
+                        ]
+                    },
+                    "price": null
+                }
+            ]
+        },
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Campus Odense (Odense Letbane)",
+                    "arrival_place_name": "Odense Baneg\u00e5rd (Odense Letbane)",
+                    "departure_datetime": "2023-12-16T00:56:00",
+                    "arrival_datetime": "2023-12-17T01:14:00",
+                    "transit_line": {
+                        "line_name": "L",
+                        "vehicle_type": "Tram",
+                        "transit_agencies": [
+                            {
+                                "name": "Odense Letbane",
+                                "uri": "https://www.odenseletbane.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Odense st - Gleis 3",
+                    "arrival_place_name": "K\u00f6penhamn H",
+                    "departure_datetime": "2023-12-17T02:26:00",
+                    "arrival_datetime": "2023-12-17T04:04:00",
+                    "transit_line": {
+                        "line_name": "IC",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "DSB",
+                                "uri": "http://www.dsb.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Copenhagen central train station (Ingerslevsgade)",
+                    "arrival_place_name": "ZOB Hamburg",
+                    "departure_datetime": "2023-12-17T06:10:00",
+                    "arrival_datetime": "2023-12-17T11:45:00",
+                    "transit_line": {
+                        "line_name": "FlixBus N613",
+                        "vehicle_type": "Bus",
+                        "transit_agencies": [
+                            {
+                                "name": "FlixBus",
+                                "uri": "https://global.flixbus.com/"
+                            }
+                        ]
+                    },
+                    "price": null
+                }
+            ]
+        },
+        {
+            "legs": [
+                {
+                    "departure_place_name": "Campus Odense (Odense Letbane)",
+                    "arrival_place_name": "Odense Baneg\u00e5rd (Odense Letbane)",
+                    "departure_datetime": "2023-12-17T08:11:00",
+                    "arrival_datetime": "2023-12-17T08:29:00",
+                    "transit_line": {
+                        "line_name": "L",
+                        "vehicle_type": "Tram",
+                        "transit_agencies": [
+                            {
+                                "name": "Odense Letbane",
+                                "uri": "https://www.odenseletbane.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                },
+                {
+                    "departure_place_name": "Odense st - Gleis 3",
+                    "arrival_place_name": "Hamburg Hbf",
+                    "departure_datetime": "2023-12-17T08:39:00",
+                    "arrival_datetime": "2023-12-17T12:06:00",
+                    "transit_line": {
+                        "line_name": "EC391",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "D\u00e4nische Staatsbahnen",
+                                "uri": "https://www.dsb.dk/"
+                            },
+                            {
+                                "name": "DSB",
+                                "uri": "http://www.dsb.dk/"
+                            }
+                        ]
+                    },
+                    "price": null
+                }
+            ]
+        }
+    ]
+}

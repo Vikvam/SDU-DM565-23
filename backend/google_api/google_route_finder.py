@@ -137,7 +137,7 @@ class GoogleRouteFinder:
     def _convert_to_datetime(timestamp, localized_time):
         date_time = datetime.strptime(timestamp, GoogleRouteFinder.datetime_format)
         localized_time = date_time.strptime(localized_time, "%H:%M")
-        date_time.replace(hour=localized_time.hour)
+        date_time = date_time.replace(hour=localized_time.hour)
         return date_time
 
     @staticmethod

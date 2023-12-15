@@ -1,21 +1,17 @@
-import os
+from abc import ABC
 from time import sleep
-from dotenv import load_dotenv
+
 import scrapy
+from attr import dataclass
+from money import Money
 from scrapy import Selector
-from scrapy.crawler import CrawlerProcess
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-from abc import ABC
-from dataclasses import dataclass
-from datetime import date
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from datetime import date, datetime
 
-from selenium_middleware import SeleniumRequest
-
-
-load_dotenv()
+from backend.spiders.selenium_middleware import SeleniumRequest
+from backend.spiders.spider_item import SpiderItem
 
 
 @dataclass
@@ -27,6 +23,7 @@ class FlixbusRequest:
 
 class FlixbusSpider(scrapy.Spider, ABC):
     name: str = "Flixbus shop spider"
+    transport_agency = "flixbus"
     _BASE_URL = f"https://global.flixbus.com"
 
     def __init__(self, request: FlixbusRequest, **kwargs):
@@ -43,7 +40,8 @@ class FlixbusSpider(scrapy.Spider, ABC):
 
     def selenium_accept_cookies(self, driver):
         WebDriverWait(driver, 5).until(lambda driver: driver.find_element(By.ID, "usercentrics-root"))
-        shadow_root = driver.execute_script('return arguments[0].shadowRoot', driver.find_element(By.ID, "usercentrics-root"))
+        shadow_root = driver.execute_script('return arguments[0].shadowRoot',
+                                            driver.find_element(By.ID, "usercentrics-root"))
         WebDriverWait(driver, 5).until(lambda driver: shadow_root.find_element(By.CSS_SELECTOR, "button.bqSTzv"))
         driver.execute_script('return arguments[0].click()', shadow_root.find_element(By.CSS_SELECTOR, "button.bqSTzv"))
 
@@ -80,35 +78,28 @@ class FlixbusSpider(scrapy.Spider, ABC):
     def parse(self, response: scrapy.http.Response, **kwargs):
         driver = response.request.meta["driver"]
         WebDriverWait(driver, response.request.wait_timeout).until(self.page_loaded)
+        routes_selector: [Selector] = response.xpath(
+            "//ul[contains(@class, 'ResultsList__resultsList___eGsLK')]/li//div[contains(@class, 'SearchResult__rowRideAndPrice___u0TJA')]")
 
-        def parse_route(selector):
-            price_selector = selector.xpath(".//span[contains(@class, 'SearchResult__price___QpySa')]")
-            price = "".join(price_selector.xpath(".//text() | .//sup/text()").getall())
-            origin_destination_time = selector.xpath(".//div[contains(@class, 'LocationsHorizontal__time___SaJCp')]//span[@aria-hidden='true']/text()").getall()
-            origin_time = origin_destination_time[0]
-            destination_time = origin_destination_time[1]
-            origin_place_name, destination_place_name = selector.xpath(".//div[contains(@class, 'LocationsHorizontal__station___ItGEv')]/span[@aria-hidden='true']/text()").getall()
-            print(price, origin_place_name, destination_place_name, origin_time, destination_time)
-
-        routes_selector: [Selector] = response.xpath("//ul[contains(@class, 'ResultsList__resultsList___eGsLK')]/li//div[contains(@class, 'SearchResult__rowRideAndPrice___u0TJA')]")
         for route_selector in routes_selector:
-            parse_route(route_selector)
+            yield self.parse_route(route_selector)
 
+    def parse_route(self, selector):
+        price_selector = selector.xpath(".//span[contains(@class, 'SearchResult__price___QpySa')]")
+        price = "".join(price_selector.xpath(".//text() | .//sup/text()").getall())
+        origin_destination_time = selector.xpath(
+            ".//div[contains(@class, 'LocationsHorizontal__time___SaJCp')]//span[@aria-hidden='true']/text()").getall()
+        origin_time = origin_destination_time[0]
+        destination_time = origin_destination_time[1]
+        origin_place_name, destination_place_name = selector.xpath(
+            ".//div[contains(@class, 'LocationsHorizontal__station___ItGEv')]/span[@aria-hidden='true']/text()").getall()
+        print(price, origin_place_name, destination_place_name, origin_time, destination_time)
 
-if __name__ == "__main__":
-    process = CrawlerProcess({
-        "DOWNLOADER_MIDDLEWARES": {
-            "selenium_middleware.SeleniumMiddleware": 800,
-        },
-        "SELENIUM_DRIVER_NAME": "firefox",
-        "SELENIUM_DRIVER_EXECUTABLE_PATH": os.getenv("FIREFOX_PATH_DRIVER"),
-        "SELENIUM_DRIVER_ARGUMENTS": [], # ["--headless"],
-        "LOG_LEVEL": "WARNING",
-    })
-    # process.crawl(FlixbusSpider, request=FlixbusRequest("Berlin", "Copenhagen", date(2023, 12, 31)))
-    # print("---------------------")
-    process.crawl(FlixbusSpider, request=FlixbusRequest("Praha", "Mnichov", date(2024, 1, 31)))
-    process.start()
-
-    # print(flixbus_scrape("Berlin", 'Copenhagen', '01.12.2023'))
-
+        return SpiderItem(
+            origin_place_name,
+            destination_place_name,
+            datetime.combine(self.request.date, datetime.strptime(origin_time, "%H:%M").time()),
+            datetime.combine(self.request.date, datetime.strptime(destination_time, "%H:%M").time()),
+            Money(amount=float(price[1:]), currency="EUR"),  # ASSUMING EUR AS CURRENCY
+            self.transport_agency
+        )

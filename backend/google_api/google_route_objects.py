@@ -23,7 +23,7 @@ class RouteLeg:
     departure_place_name: str
     arrival_place_name: str
     departure_datetime: datetime
-    arrival_datatime: datetime
+    arrival_datetime: datetime
     transit_line: RouteLegTransitLine
     price: Money = None
 
