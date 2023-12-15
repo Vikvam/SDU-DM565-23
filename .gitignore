@@ -1,5 +1,6 @@
 .env
 backend/.env
+backend/result.json
 
 /.idea
 /.code

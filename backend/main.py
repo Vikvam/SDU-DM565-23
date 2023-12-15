@@ -1,3 +1,4 @@
+import datetime
 import json
 import urllib.parse
 
@@ -70,7 +71,7 @@ def crawl(crawler_process, result):
 if __name__ == "__main__":
     departure = "University of Southern Denmark, SDU"
     arrival = "ZOB Hamburg"
-    departure_datetime = "2023-12-16T22:00:00Z"
+    departure_datetime = datetime.datetime(2023, 12, 16, 16, 30)
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
     result = google_finder.find_routes(departure, arrival, departure_datetime)

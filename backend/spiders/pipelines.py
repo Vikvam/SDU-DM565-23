@@ -1,8 +1,6 @@
 import json
 from datetime import datetime
 
-from backend.google_api.google_route_finder import GoogleRouteFinder
-
 
 class RoutePipeline:
     def __init__(self):
@@ -18,7 +16,7 @@ class RoutePipeline:
             for step in route['legs']:
                 transit_agency_name = step['transit_line']['transit_agencies'][0]['name'].lower()
 
-                if transit_agency_name == item.transport_agent_name:
+                if transit_agency_name == item.transport_agent_name.lower():
                     departure_datetime = datetime.strptime(step['departure_datetime'],
                                                            "%Y-%m-%dT%H:%M:%S")
                     arrival_datetime = datetime.strptime(step['arrival_datetime'],

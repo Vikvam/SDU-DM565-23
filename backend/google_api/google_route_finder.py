@@ -1,14 +1,12 @@
 from datetime import datetime
 
 import requests
-
-from backend.google_api.google_route_objects import ResponseBody, RouteLegTransitAgency, RouteLegTransitLine, RouteLeg, \
-    Route
+from backend.google_api.datetime_converter import combine_date_with_time, convert_datetime_to_str
+from backend.google_api.google_route_objects import (ResponseBody, RouteLegTransitAgency,
+                                                     RouteLegTransitLine, RouteLeg, Route)
 
 
 class GoogleRouteFinder:
-    datetime_format = "%Y-%m-%dT%H:%M:%SZ"
-
     request_headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": "",
@@ -34,10 +32,10 @@ class GoogleRouteFinder:
     def __init__(self, api_key):
         self.request_headers["X-Goog-Api-Key"] = api_key
 
-    def find_routes(self, start_address, end_address, departure_time):
+    def find_routes(self, start_address: str, end_address: str, departure_time: datetime):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
-        self.request_body["departureTime"] = departure_time
+        self.request_body["departureTime"] = convert_datetime_to_str(departure_time)
 
         try:
             result = self._send_request()
@@ -117,28 +115,21 @@ class GoogleRouteFinder:
 
         departure_place_name = stop_details['departureStop']['name']
         arrival_place_name = stop_details['arrivalStop']['name']
-        departure_datetime = GoogleRouteFinder._convert_to_datetime(
+        departure_datetime = combine_date_with_time(
             stop_details['departureTime'],
             GoogleRouteFinder._get_time_from_localized_values(localized_values, 'departureTime')
         )
-        arrival_datatime = GoogleRouteFinder._convert_to_datetime(
+        arrival_datetime = combine_date_with_time(
             stop_details['arrivalTime'],
             GoogleRouteFinder._get_time_from_localized_values(localized_values, 'arrivalTime')
         )
         transit_line = GoogleRouteFinder._convert_transit_line_to_object(transit_details['transitLine'])
 
-        return RouteLeg(departure_place_name, arrival_place_name, departure_datetime, arrival_datatime, transit_line)
+        return RouteLeg(departure_place_name, arrival_place_name, departure_datetime, arrival_datetime, transit_line)
 
     @staticmethod
     def _get_time_from_localized_values(localized_values, direction):
         return localized_values[direction]['time']['text']
-
-    @staticmethod
-    def _convert_to_datetime(timestamp, localized_time):
-        date_time = datetime.strptime(timestamp, GoogleRouteFinder.datetime_format)
-        localized_time = date_time.strptime(localized_time, "%H:%M")
-        date_time = date_time.replace(hour=localized_time.hour)
-        return date_time
 
     @staticmethod
     def _convert_transit_line_to_object(transit_line):
