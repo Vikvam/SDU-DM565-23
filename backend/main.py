@@ -1,14 +1,13 @@
 import datetime
-import json
 import urllib.parse
 
 import requests
-from fastapi.encoders import jsonable_encoder
 from scrapy.crawler import CrawlerProcess
 from twisted.internet import defer, reactor
 
 from backend.config import get_settings, get_pipeline_crawler_process_settings
 from backend.google_api.google_route_finder import GoogleRouteFinder
+from backend.json_serializer import write_to_json_file, encode_json
 from backend.spiders.flixbus_spider import FlixbusSpider
 from backend.spiders.spider_base import SpiderRequest
 
@@ -76,12 +75,11 @@ if __name__ == "__main__":
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
     result = google_finder.find_routes(departure, arrival, departure_datetime)
     convert_place_names_to_official(result)
-
-    json_result = jsonable_encoder(result)
-    json_object = json.dumps(json_result, indent=4, ensure_ascii=False).encode("utf-8")
+    # result = aux_result # use to skip the previous computations
+    json_result = encode_json(result)
 
     with open("result.json", "w") as out:
-        out.write(json_object.decode())
+        write_to_json_file(out, json_result)
 
     crawler_process = CrawlerProcess(
         get_pipeline_crawler_process_settings()

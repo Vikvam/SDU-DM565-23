@@ -1,5 +1,7 @@
 import json
-from datetime import datetime
+
+from backend.google_api.datetime_converter import convert_str_to_datetime
+from backend.json_serializer import write_to_json_file
 
 
 class RoutePipeline:
@@ -17,20 +19,23 @@ class RoutePipeline:
                 transit_agency_name = step['transit_line']['transit_agencies'][0]['name'].lower()
 
                 if transit_agency_name == item.transport_agent_name.lower():
-                    departure_datetime = datetime.strptime(step['departure_datetime'],
-                                                           "%Y-%m-%dT%H:%M:%S")
-                    arrival_datetime = datetime.strptime(step['arrival_datetime'],
-                                                         "%Y-%m-%dT%H:%M:%S")
+                    departure_datetime = convert_str_to_datetime(step['departure_datetime'])
+                    arrival_datetime = convert_str_to_datetime(step['arrival_datetime'])
 
-                    if departure_datetime.time() == item.departure_datetime.time() and arrival_datetime.time() == item.arrival_date_time.time():
+
+                    if (departure_datetime.time() == item.departure_datetime.time() and
+                            arrival_datetime.time() == item.arrival_date_time.time()):
                         step['price'] = {
                             "amount": "{:.2f}".format(item.price.amount),
                             "currency:": item.price.currency
                         }
 
     def close_spider(self, spider):
-        json_to_write = json.dumps(self._result, indent=4)
-        self._file.seek(0)
-        self._file.truncate(0)
-        self._file.write(json_to_write + "\n")
+        self.erase_file_content(self._file)
+        write_to_json_file(self._file, self._result)
         self._file.close()
+
+    @staticmethod
+    def erase_file_content(file):
+        file.seek(0)
+        file.truncate(0)

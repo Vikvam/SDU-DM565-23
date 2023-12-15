@@ -1,7 +1,4 @@
 from datetime import datetime
-
-from money import Money
-
 from backend.google_api.google_route_objects import RouteLeg, RouteLegTransitLine, RouteLegTransitAgency, ResponseBody, \
     Route
 
@@ -14,8 +11,8 @@ aux_result = ResponseBody(
                 RouteLeg(
                     departure_place_name="Campus Odense (Odense Letbane)",
                     arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 16, 48),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 6),
+                    departure_datetime=datetime(2023, 12, 16, 17, 51),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 9),
                     transit_line=RouteLegTransitLine(
                         line_name="L",
                         vehicle_type="Tram",
@@ -26,86 +23,13 @@ aux_result = ResponseBody(
                             )
                         ],
                     ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Odense st - Gleis 3",
-                    arrival_place_name="Fredericia",
-                    departure_datetime=datetime(2024, 1, 15, 17, 10),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 38),
-                    transit_line=RouteLegTransitLine(
-                        line_name="ICL",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Fredericia",
-                    arrival_place_name="Flensburg / Flensborg",
-                    departure_datetime=datetime(2024, 1, 15, 17, 45),
-                    arrival_datetime=datetime(2024, 1, 15, 19, 7),
-                    transit_line=RouteLegTransitLine(
-                        line_name="IC",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Dänische Staatsbahnen",
-                                uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
-                            ),
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Flensburg / Flensborg",
-                    arrival_place_name="Hamburg Hbf",
-                    departure_datetime=datetime(2024, 1, 15, 19, 15),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 17),
-                    transit_line=RouteLegTransitLine(
-                        line_name="RE7",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="DB Regio AG", uri="http://www.bahn.de/"
-                            ),
-                            RouteLegTransitAgency(
-                                name="Hamburger Verkehrsverbund (hvv)",
-                                uri="http://www.hvv.de/",
-                            ),
-                        ],
-                    ),
-                    price=Money(),
-                ),
-            ]
-        ),
-        Route(
-            legs=[
-                RouteLeg(
-                    departure_place_name="Campus Odense (Odense Letbane)",
-                    arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 16, 48),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 6),
-                    transit_line=RouteLegTransitLine(
-                        line_name="L",
-                        vehicle_type="Tram",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Odense Letbane",
-                                uri="https://www.odenseletbane.dk/",
-                            )
-                        ],
-                    ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Odense st - Gleis 3",
                     arrival_place_name="Kolding st",
-                    departure_datetime=datetime(2024, 1, 15, 17, 13),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 49),
+                    departure_datetime=datetime(2023, 12, 16, 18, 13),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 49),
                     transit_line=RouteLegTransitLine(
                         line_name="IC",
                         vehicle_type="Train",
@@ -113,31 +37,31 @@ aux_result = ResponseBody(
                             RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Kolding st",
                     arrival_place_name="Flensburg / Flensborg",
-                    departure_datetime=datetime(2024, 1, 15, 17, 58),
-                    arrival_datetime=datetime(2024, 1, 15, 19, 7),
+                    departure_datetime=datetime(2023, 12, 16, 18, 58),
+                    arrival_datetime=datetime(2023, 12, 16, 20, 7),
                     transit_line=RouteLegTransitLine(
                         line_name="IC",
                         vehicle_type="Train",
                         transit_agencies=[
+                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
                             RouteLegTransitAgency(
                                 name="Dänische Staatsbahnen",
                                 uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
                             ),
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Flensburg / Flensborg",
-                    arrival_place_name="Hamburg Hbf",
-                    departure_datetime=datetime(2024, 1, 15, 19, 15),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 17),
+                    arrival_place_name="Neumünster",
+                    departure_datetime=datetime(2023, 12, 16, 20, 15),
+                    arrival_datetime=datetime(2023, 12, 16, 21, 22),
                     transit_line=RouteLegTransitLine(
                         line_name="RE7",
                         vehicle_type="Train",
@@ -151,66 +75,13 @@ aux_result = ResponseBody(
                             ),
                         ],
                     ),
-                    price=Money(),
-                ),
-            ]
-        ),
-        Route(
-            legs=[
-                RouteLeg(
-                    departure_place_name="Campus Odense (Odense Letbane)",
-                    arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 16, 48),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 6),
-                    transit_line=RouteLegTransitLine(
-                        line_name="L",
-                        vehicle_type="Tram",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Odense Letbane",
-                                uri="https://www.odenseletbane.dk/",
-                            )
-                        ],
-                    ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
-                    departure_place_name="Odense st - Gleis 3",
-                    arrival_place_name="Lunderskov st - Gleis 1",
-                    departure_datetime=datetime(2024, 1, 15, 17, 13),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 59),
-                    transit_line=RouteLegTransitLine(
-                        line_name="IC",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Lunderskov st - Gleis 1",
-                    arrival_place_name="Flensburg / Flensborg",
-                    departure_datetime=datetime(2024, 1, 15, 18, 6),
-                    arrival_datetime=datetime(2024, 1, 15, 19, 7),
-                    transit_line=RouteLegTransitLine(
-                        line_name="IC",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
-                            RouteLegTransitAgency(
-                                name="Dänische Staatsbahnen",
-                                uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
-                            ),
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Flensburg / Flensborg",
+                    departure_place_name="Neumünster",
                     arrival_place_name="Hamburg Hbf",
-                    departure_datetime=datetime(2024, 1, 15, 19, 15),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 17),
+                    departure_datetime=datetime(2023, 12, 16, 21, 28),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 17),
                     transit_line=RouteLegTransitLine(
                         line_name="RE7",
                         vehicle_type="Train",
@@ -224,7 +95,7 @@ aux_result = ResponseBody(
                             ),
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
             ]
         ),
@@ -233,8 +104,8 @@ aux_result = ResponseBody(
                 RouteLeg(
                     departure_place_name="Campus Odense (Odense Letbane)",
                     arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 16, 48),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 6),
+                    departure_datetime=datetime(2023, 12, 16, 17, 41),
+                    arrival_datetime=datetime(2023, 12, 16, 17, 59),
                     transit_line=RouteLegTransitLine(
                         line_name="L",
                         vehicle_type="Tram",
@@ -245,103 +116,13 @@ aux_result = ResponseBody(
                             )
                         ],
                     ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Odense st - Gleis 3",
-                    arrival_place_name="Lunderskov st - Gleis 1",
-                    departure_datetime=datetime(2024, 1, 15, 17, 13),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 59),
-                    transit_line=RouteLegTransitLine(
-                        line_name="IC",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Lunderskov st - Gleis 1",
-                    arrival_place_name="Flensburg / Flensborg",
-                    departure_datetime=datetime(2024, 1, 15, 18, 6),
-                    arrival_datetime=datetime(2024, 1, 15, 19, 7),
-                    transit_line=RouteLegTransitLine(
-                        line_name="IC",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
-                            RouteLegTransitAgency(
-                                name="Dänische Staatsbahnen",
-                                uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
-                            ),
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Flensburg / Flensborg",
-                    arrival_place_name="Hamburg Dammtor",
-                    departure_datetime=datetime(2024, 1, 15, 19, 15),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 12),
-                    transit_line=RouteLegTransitLine(
-                        line_name="RE7",
-                        vehicle_type="Train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Hamburger Verkehrsverbund (hvv)",
-                                uri="http://www.hvv.de/",
-                            ),
-                            RouteLegTransitAgency(
-                                name="DB Regio AG", uri="http://www.bahn.de/"
-                            ),
-                        ],
-                    ),
-                    price=Money(),
-                ),
-                RouteLeg(
-                    departure_place_name="Hamburg Dammtor",
-                    arrival_place_name="Hamburg Hbf",
-                    departure_datetime=datetime(2024, 1, 15, 21, 19, 18),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 21),
-                    transit_line=RouteLegTransitLine(
-                        line_name="S5",
-                        vehicle_type="Commuter train",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Hamburger Verkehrsverbund (hvv)",
-                                uri="http://www.hvv.de/",
-                            )
-                        ],
-                    ),
-                    price=Money(),
-                ),
-            ]
-        ),
-        Route(
-            legs=[
-                RouteLeg(
-                    departure_place_name="Campus Odense (Odense Letbane)",
-                    arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 16, 48),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 6),
-                    transit_line=RouteLegTransitLine(
-                        line_name="L",
-                        vehicle_type="Tram",
-                        transit_agencies=[
-                            RouteLegTransitAgency(
-                                name="Odense Letbane",
-                                uri="https://www.odenseletbane.dk/",
-                            )
-                        ],
-                    ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Odense st - Gleis 3",
                     arrival_place_name="Fredericia",
-                    departure_datetime=datetime(2024, 1, 15, 17, 10),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 38),
+                    departure_datetime=datetime(2023, 12, 16, 18, 10),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 38),
                     transit_line=RouteLegTransitLine(
                         line_name="ICL",
                         vehicle_type="Train",
@@ -349,13 +130,13 @@ aux_result = ResponseBody(
                             RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Fredericia",
                     arrival_place_name="Flensburg / Flensborg",
-                    departure_datetime=datetime(2024, 1, 15, 17, 45),
-                    arrival_datetime=datetime(2024, 1, 15, 19, 7),
+                    departure_datetime=datetime(2023, 12, 16, 18, 45),
+                    arrival_datetime=datetime(2023, 12, 16, 20, 7),
                     transit_line=RouteLegTransitLine(
                         line_name="IC",
                         vehicle_type="Train",
@@ -367,15 +148,128 @@ aux_result = ResponseBody(
                             RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Flensburg / Flensborg",
-                    arrival_place_name="Hamburg Dammtor",
-                    departure_datetime=datetime(2024, 1, 15, 19, 15),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 12),
+                    arrival_place_name="Neumünster",
+                    departure_datetime=datetime(2023, 12, 16, 20, 15),
+                    arrival_datetime=datetime(2023, 12, 16, 21, 22),
                     transit_line=RouteLegTransitLine(
                         line_name="RE7",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="DB Regio AG", uri="http://www.bahn.de/"
+                            ),
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Neumünster",
+                    arrival_place_name="Hamburg Hbf",
+                    departure_datetime=datetime(2023, 12, 16, 21, 28),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 17),
+                    transit_line=RouteLegTransitLine(
+                        line_name="RE7",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="DB Regio AG", uri="http://www.bahn.de/"
+                            ),
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+            ]
+        ),
+        Route(
+            legs=[
+                RouteLeg(
+                    departure_place_name="Campus Odense (Odense Letbane)",
+                    arrival_place_name="Odense Banegård (Odense Letbane)",
+                    departure_datetime=datetime(2023, 12, 16, 17, 51),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 9),
+                    transit_line=RouteLegTransitLine(
+                        line_name="L",
+                        vehicle_type="Tram",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="Odense Letbane",
+                                uri="https://www.odenseletbane.dk/",
+                            )
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Odense st - Gleis 3",
+                    arrival_place_name="Kolding st",
+                    departure_datetime=datetime(2023, 12, 16, 18, 13),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 49),
+                    transit_line=RouteLegTransitLine(
+                        line_name="IC",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Kolding st",
+                    arrival_place_name="Flensburg / Flensborg",
+                    departure_datetime=datetime(2023, 12, 16, 18, 58),
+                    arrival_datetime=datetime(2023, 12, 16, 20, 7),
+                    transit_line=RouteLegTransitLine(
+                        line_name="IC",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
+                            RouteLegTransitAgency(
+                                name="Dänische Staatsbahnen",
+                                uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Flensburg / Flensborg",
+                    arrival_place_name="Neumünster",
+                    departure_datetime=datetime(2023, 12, 16, 20, 15),
+                    arrival_datetime=datetime(2023, 12, 16, 21, 22),
+                    transit_line=RouteLegTransitLine(
+                        line_name="RE7",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="DB Regio AG", uri="http://www.bahn.de/"
+                            ),
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Neumünster",
+                    arrival_place_name="Hamburg Dammtor",
+                    departure_datetime=datetime(2023, 12, 16, 21, 28),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 11),
+                    transit_line=RouteLegTransitLine(
+                        line_name="RE70",
                         vehicle_type="Train",
                         transit_agencies=[
                             RouteLegTransitAgency(
@@ -387,13 +281,13 @@ aux_result = ResponseBody(
                             ),
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Hamburg Dammtor",
                     arrival_place_name="Hamburg Hbf",
-                    departure_datetime=datetime(2024, 1, 15, 21, 19, 18),
-                    arrival_datetime=datetime(2024, 1, 15, 21, 21),
+                    departure_datetime=datetime(2023, 12, 16, 22, 19),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 21),
                     transit_line=RouteLegTransitLine(
                         line_name="S5",
                         vehicle_type="Commuter train",
@@ -404,7 +298,7 @@ aux_result = ResponseBody(
                             )
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
             ]
         ),
@@ -413,8 +307,8 @@ aux_result = ResponseBody(
                 RouteLeg(
                     departure_place_name="Campus Odense (Odense Letbane)",
                     arrival_place_name="Odense Banegård (Odense Letbane)",
-                    departure_datetime=datetime(2024, 1, 15, 17, 41),
-                    arrival_datetime=datetime(2024, 1, 15, 17, 59),
+                    departure_datetime=datetime(2023, 12, 16, 17, 41),
+                    arrival_datetime=datetime(2023, 12, 16, 17, 59),
                     transit_line=RouteLegTransitLine(
                         line_name="L",
                         vehicle_type="Tram",
@@ -425,13 +319,123 @@ aux_result = ResponseBody(
                             )
                         ],
                     ),
-                    price=Money(),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Odense st - Gleis 3",
+                    arrival_place_name="Fredericia",
+                    departure_datetime=datetime(2023, 12, 16, 18, 10),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 38),
+                    transit_line=RouteLegTransitLine(
+                        line_name="ICL",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Fredericia",
+                    arrival_place_name="Flensburg / Flensborg",
+                    departure_datetime=datetime(2023, 12, 16, 18, 45),
+                    arrival_datetime=datetime(2023, 12, 16, 20, 7),
+                    transit_line=RouteLegTransitLine(
+                        line_name="IC",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="Dänische Staatsbahnen",
+                                uri="https://www.thetrainline.com/de/bahnunternehmen/dsb",
+                            ),
+                            RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/"),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Flensburg / Flensborg",
+                    arrival_place_name="Neumünster",
+                    departure_datetime=datetime(2023, 12, 16, 20, 15),
+                    arrival_datetime=datetime(2023, 12, 16, 21, 22),
+                    transit_line=RouteLegTransitLine(
+                        line_name="RE7",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="DB Regio AG", uri="http://www.bahn.de/"
+                            ),
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Neumünster",
+                    arrival_place_name="Hamburg Dammtor",
+                    departure_datetime=datetime(2023, 12, 16, 21, 28),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 11),
+                    transit_line=RouteLegTransitLine(
+                        line_name="RE70",
+                        vehicle_type="Train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            ),
+                            RouteLegTransitAgency(
+                                name="DB Regio AG", uri="http://www.bahn.de/"
+                            ),
+                        ],
+                    ),
+                    price=None,
+                ),
+                RouteLeg(
+                    departure_place_name="Hamburg Dammtor",
+                    arrival_place_name="Hamburg Hbf",
+                    departure_datetime=datetime(2023, 12, 16, 22, 19),
+                    arrival_datetime=datetime(2023, 12, 16, 22, 21),
+                    transit_line=RouteLegTransitLine(
+                        line_name="S5",
+                        vehicle_type="Commuter train",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="Hamburger Verkehrsverbund (hvv)",
+                                uri="http://www.hvv.de/",
+                            )
+                        ],
+                    ),
+                    price=None,
+                ),
+            ]
+        ),
+        Route(
+            legs=[
+                RouteLeg(
+                    departure_place_name="Campus Odense (Odense Letbane)",
+                    arrival_place_name="Odense Banegård (Odense Letbane)",
+                    departure_datetime=datetime(2023, 12, 16, 18, 41),
+                    arrival_datetime=datetime(2023, 12, 16, 18, 59),
+                    transit_line=RouteLegTransitLine(
+                        line_name="L",
+                        vehicle_type="Tram",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="Odense Letbane",
+                                uri="https://www.odenseletbane.dk/",
+                            )
+                        ],
+                    ),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Odense st - Gleis 3",
                     arrival_place_name="Kolding st",
-                    departure_datetime=datetime(2024, 1, 15, 18, 13),
-                    arrival_datetime=datetime(2024, 1, 15, 18, 49),
+                    departure_datetime=datetime(2023, 12, 16, 19, 13),
+                    arrival_datetime=datetime(2023, 12, 16, 19, 49),
                     transit_line=RouteLegTransitLine(
                         line_name="IC",
                         vehicle_type="Train",
@@ -439,13 +443,13 @@ aux_result = ResponseBody(
                             RouteLegTransitAgency(name="DSB", uri="http://www.dsb.dk/")
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
                 RouteLeg(
                     departure_place_name="Kolding",
                     arrival_place_name="ZOB Hamburg",
-                    departure_datetime=datetime(2024, 1, 15, 19, 50),
-                    arrival_datetime=datetime(2024, 1, 15, 23, 40),
+                    departure_datetime=datetime(2023, 12, 16, 20, 50),
+                    arrival_datetime=datetime(2023, 12, 17, 0, 40),
                     transit_line=RouteLegTransitLine(
                         line_name="FlixBus N74",
                         vehicle_type="Bus",
@@ -455,8 +459,28 @@ aux_result = ResponseBody(
                             )
                         ],
                     ),
-                    price=Money(),
+                    price=None,
                 ),
+            ]
+        ),
+        Route(
+            legs=[
+                RouteLeg(
+                    departure_place_name="Parkering Odense Syd",
+                    arrival_place_name="ZOB Hamburg",
+                    departure_datetime=datetime(2023, 12, 17, 0, 15),
+                    arrival_datetime=datetime(2023, 12, 17, 4, 40),
+                    transit_line=RouteLegTransitLine(
+                        line_name="FlixBus N98",
+                        vehicle_type="Bus",
+                        transit_agencies=[
+                            RouteLegTransitAgency(
+                                name="FlixBus", uri="https://global.flixbus.com/"
+                            )
+                        ],
+                    ),
+                    price=None,
+                )
             ]
         ),
     ],
