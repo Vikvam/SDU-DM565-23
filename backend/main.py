@@ -1,6 +1,6 @@
 import datetime
 import urllib.parse
-
+import logging
 import requests
 from scrapy.crawler import CrawlerProcess
 from twisted.internet import defer, reactor
@@ -8,7 +8,7 @@ from twisted.internet import defer, reactor
 from backend.config import get_settings, get_pipeline_crawler_process_settings
 from backend.google_api.google_route_finder import GoogleRouteFinder
 from backend.json_serializer import write_to_json_file, encode_json
-from backend.spiders.flixbus_spider import FlixbusSpider
+from backend.spiders.implementations.flixbus_spider import FlixbusSpider
 from backend.spiders.spider_base import SpiderRequest
 
 open_street_map_url = "https://nominatim.openstreetmap.org/search?"
@@ -68,9 +68,18 @@ def crawl(crawler_process, result):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s]: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    logger = logging.getLogger(__name__)
+
     departure = "University of Southern Denmark, SDU"
     arrival = "ZOB Hamburg"
     departure_datetime = datetime.datetime(2023, 12, 16, 16, 30)
+
+    logger.info(f"Searching... ('{departure}', '{arrival}', {departure_datetime})")
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
     result = google_finder.find_routes(departure, arrival, departure_datetime)

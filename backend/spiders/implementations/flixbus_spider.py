@@ -54,7 +54,7 @@ class FlixbusSpider(BaseSpider):
     def selenium_url_search(self, driver):
         url = driver.current_url.split("&rideDate")[0]
         url += f"&rideDate={self._request.departure_datetime.strftime('%d.%m.%Y')}&adult=1&_locale=en&features%5Bfeature.enable_distribusion%5D=1&features%5Bfeature.train_cities_only%5D=0&features%5Bfeature.auto_update_disabled%5D=0&features%5Bfeature.webc_search_station_suggestions_enabled%5D=0&features%5Bfeature.darken_page%5D="
-        print(url)
+        print(f"Flixbus search: {url}")
         driver.get(url)
 
     def selenium_search(self, driver):
