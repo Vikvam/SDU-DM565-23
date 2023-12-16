@@ -26,7 +26,8 @@ class SpiderItem:
 class BaseSpider(scrapy.Spider, ABC):
     name: str
 
-    def __init__(self, travel_agency: str, request: SpiderRequest, **kwargs):
+    def __init__(self, travel_agency: str, request: SpiderRequest, timeout=4, **kwargs):
         super().__init__(**kwargs)
         self._travel_agency = travel_agency
         self._request = request
+        self._timeout = timeout
