@@ -1,3 +1,4 @@
+import logging
 from functools import lru_cache
 
 from dotenv import load_dotenv, find_dotenv
@@ -40,3 +41,12 @@ def get_pipeline_crawler_process_settings():
     }
 
     return settings
+
+
+@lru_cache
+def get_logging_settings():
+    return {
+        "level": logging.INFO,
+        "format": "%(asctime)s [%(levelname)s]: %(message)s",
+        "datefmt": "%H:%M:%S"
+    }
