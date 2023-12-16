@@ -10,6 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
+from backend.spiders.utils import convert_price_to_money, combine_date_and_time
 
 
 class FlixbusSpider(BaseSpider):
@@ -74,31 +75,21 @@ class FlixbusSpider(BaseSpider):
         for route_selector in routes_selector:
             yield self.parse_route(route_selector)
 
-    def parse_route(self, selector):
+    def parse_route(self, selector: Selector):
         price_selector = selector.xpath(".//span[contains(@class, 'SearchResult__price___QpySa')]")
         price = "".join(price_selector.xpath(".//text() | .//sup/text()").getall())
-        origin_destination_time = selector.xpath(
+        origin_time = selector.xpath(
             ".//div[contains(@class, 'LocationsHorizontal__time___SaJCp')]//span[@aria-hidden='true']/text()").getall()
-        origin_time = origin_destination_time[0]
-        destination_time = origin_destination_time[1]
-        origin_place_name, destination_place_name = selector.xpath(
+        origin_time = origin_time[0]
+        destination_time = origin_time[1]
+        departure_place, arrival_place = selector.xpath(
             ".//div[contains(@class, 'LocationsHorizontal__station___ItGEv')]/span[@aria-hidden='true']/text()").getall()
-
-        print(price, origin_place_name, destination_place_name, origin_time, destination_time)
+        print(price, departure_place, arrival_place, origin_time, destination_time)
         return SpiderItem(
-            origin_place_name,
-            destination_place_name,
-            FlixbusSpider.combine_date_and_time(self._request.departure_datetime, origin_time),
-            FlixbusSpider.combine_date_and_time(self._request.departure_datetime, destination_time),
-            FlixbusSpider.convert_price_to_money(price),
+            departure_place,
+            arrival_place,
+            combine_date_and_time(self._request.departure_datetime, origin_time),
+            combine_date_and_time(self._request.departure_datetime, destination_time),
+            convert_price_to_money(price, self.DEFAULT_CURRENCY),
             self._travel_agency
         )
-
-    @staticmethod
-    def combine_date_and_time(date: datetime, time: str) -> datetime:
-        time = datetime.strptime(time, "%H:%M").time()
-        return datetime.combine(date, time)
-
-    @staticmethod
-    def convert_price_to_money(price: str) -> Money:
-        return Money(amount=float(price[1:]), currency=FlixbusSpider.DEFAULT_CURRENCY)

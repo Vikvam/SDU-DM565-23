@@ -12,11 +12,13 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
+from backend.spiders.utils import convert_price_to_money, combine_date_and_time
 
 
 class DBSpider(BaseSpider):
     name: str = "DB shop spider"
     _BASE_URL = "https://www.bahn.de/"
+    DEFAULT_CURRENCY = "EUR"
 
     def __init__(self, request: SpiderRequest, **kwargs):
         super().__init__("DB", request, **kwargs)
@@ -82,15 +84,22 @@ class DBSpider(BaseSpider):
         return driver.find_element(By.CSS_SELECTOR, "div.loading-indicator ul li")
 
     def parse(self, response: scrapy.http.Response, **kwargs):
-        def parse_route(selector):
-            price = selector.xpath(".//span[contains(@class, 'reise-preis__preis')]/text()").get()
-            origin_time = selector.xpath(".//time[contains(@class, 'reiseplan__uebersicht-uhrzeit-sollzeit')]/text()").get()
-            destination_time = "TODO"
-            departure_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-start-value')]/text()").get()
-            arrival_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-ziel-value')]/text()").get()
-            print(price, departure_place, arrival_place, origin_time, destination_time)
-
         routes_selector: [Selector] = response.css("ul.verbindung-list li")
         for route_selector in routes_selector:
-            parse_route(route_selector)
+            self.parse_route(route_selector)
 
+    def parse_route(self, selector: Selector):
+        price = selector.xpath(".//span[contains(@class, 'reise-preis__preis')]/text()").get()
+        origin_time = selector.xpath(".//time[contains(@class, 'reiseplan__uebersicht-uhrzeit-sollzeit')]/text()").get()
+        destination_time = "TODO"
+        departure_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-start-value')]/text()").get()
+        arrival_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-ziel-value')]/text()").get()
+        print(price, departure_place, arrival_place, origin_time, destination_time)
+        return SpiderItem(
+            departure_place,
+            arrival_place,
+            combine_date_and_time(self._request.departure_datetime, origin_time),
+            combine_date_and_time(self._request.departure_datetime, origin_time),  # TODO
+            convert_price_to_money(price, self.DEFAULT_CURRENCY),
+            self._travel_agency
+        )

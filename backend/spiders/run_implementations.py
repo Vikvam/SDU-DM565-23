@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
     process = CrawlerProcess(get_basic_crawler_process_settings())
     process.crawl(FlixbusSpider, request)
-    process.crawl(DBSpider, request)
+    # process.crawl(DBSpider, request)
     process.start()
