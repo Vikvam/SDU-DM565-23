@@ -8,6 +8,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
+from backend.google_api.datetime_converter import combine_date_with_time
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
 from backend.spiders.utils import convert_price_to_money, combine_date_and_time
@@ -78,18 +79,18 @@ class FlixbusSpider(BaseSpider):
     def parse_route(self, selector: Selector):
         price_selector = selector.xpath(".//span[contains(@class, 'SearchResult__price___QpySa')]")
         price = "".join(price_selector.xpath(".//text() | .//sup/text()").getall())
-        origin_time = selector.xpath(
+        time_selector = selector.xpath(
             ".//div[contains(@class, 'LocationsHorizontal__time___SaJCp')]//span[@aria-hidden='true']/text()").getall()
-        origin_time = origin_time[0]
-        destination_time = origin_time[1]
+        origin_time = time_selector[0]
+        destination_time = time_selector[1]
         departure_place, arrival_place = selector.xpath(
             ".//div[contains(@class, 'LocationsHorizontal__station___ItGEv')]/span[@aria-hidden='true']/text()").getall()
         print(price, departure_place, arrival_place, origin_time, destination_time)
         return SpiderItem(
             departure_place,
             arrival_place,
-            combine_date_and_time(self._request.departure_datetime, origin_time),
-            combine_date_and_time(self._request.departure_datetime, destination_time),
+            combine_date_with_time(self._request.departure_datetime, origin_time),
+            combine_date_with_time(self._request.departure_datetime, destination_time),
             convert_price_to_money(price, self.DEFAULT_CURRENCY),
             self._travel_agency
         )

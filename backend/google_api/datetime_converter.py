@@ -18,7 +18,7 @@ def combine_date_with_time(datetime_val: datetime | str, time_val: str) -> datet
 
     time_val = convert_str_to_time(time_val)
 
-    if datetime_val.time().hour > time_val.hour:
+    if datetime_val.hour > time_val.hour:
         datetime_val += timedelta(days=1)
 
     return datetime.combine(datetime_val, time_val)

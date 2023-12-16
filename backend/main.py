@@ -61,7 +61,7 @@ def crawl(crawler_process, result):
                 yield crawler_process.crawl(FlixbusSpider,
                                             request=SpiderRequest(step.departure_place_name,
                                                                   step.arrival_place_name,
-                                                                  step.departure_datetime.date())
+                                                                  step.departure_datetime)
                                             )
 
     reactor.stop()
