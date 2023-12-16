@@ -100,6 +100,14 @@ class DBSpider(BaseSpider):
             arrival_place,
             combine_date_and_time(self._request.departure_datetime, origin_time),
             combine_date_and_time(self._request.departure_datetime, origin_time),  # TODO
-            convert_price_to_money(price, self.DEFAULT_CURRENCY),
+            self.get_money_from_price(price),
             self._travel_agency
         )
+
+    def get_money_from_price(self, price) -> Money:
+        if not price:
+            return convert_price_to_money(price, self.DEFAULT_CURRENCY)
+        price, currency = price.split()
+        if currency == "€": currency = "EUR"
+        else: raise AssertionError("Invalid currency")
+        return convert_price_to_money(price.replace(",", "."), currency)
