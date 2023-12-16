@@ -1,70 +1,67 @@
 import datetime
-import urllib.parse
 import logging
-import requests
+from typing import Type
+
 from scrapy.crawler import CrawlerProcess
 from twisted.internet import defer, reactor
 
 from backend.config import get_settings, get_pipeline_crawler_process_settings
 from backend.google_api.google_route_finder import GoogleRouteFinder
+from backend.google_api.google_route_objects import Route, RouteLeg, RouteLegTransitAgency
 from backend.json_serializer import write_to_json_file, encode_json
+from backend.name_resolvers.name_resolver_base import NameResolverBase
+from backend.name_resolvers.openstreet_name_resolver import OpenStreetMapNameResolver
 from backend.spiders.implementations.flixbus_spider import FlixbusSpider
-from backend.spiders.spider_base import SpiderRequest
-
-open_street_map_url = "https://nominatim.openstreetmap.org/search?"
-open_street_map_url_params = {
-    "format": "json",
-    "namedetails": 1,
-    "limit": 1,
-    "amenity": ""
-}
-
-
-def convert_place_names_to_official(result):
-    for route in result.routes:
-        for step in route.legs:
-            official_name = get_place_official_name(step.arrival_place_name)
-            if official_name is not None:
-                step.arrival_place_name = official_name
-
-            official_name = get_place_official_name(step.departure_place_name)
-            if official_name is not None:
-                step.departure_place_name = official_name
-
-
-def get_place_official_name(place_name):
-    params = open_street_map_url_params.copy()
-    params["amenity"] = place_name
-    url = open_street_map_url + urllib.parse.urlencode(params)
-    res = requests.get(url)
-    res.raise_for_status()
-    res = res.json()
-
-    if len(res) == 0:
-        return None
-    else:
-        res = res[0]["namedetails"]
-
-        if "official_name" in res:
-            return res["official_name"]
-        else:
-            return res["name"]
+from backend.spiders.spider_base import SpiderRequest, BaseSpider
 
 
 @defer.inlineCallbacks
-def crawl(crawler_process, result):
-    for route in result.routes:
+def crawl(process: CrawlerProcess, data: list[Route], name_resolvers: list[NameResolverBase]):
+    for route in data:
         for step in route.legs:
-            transport_agency_names = [i.name.lower() for i in step.transit_line.transit_agencies]
+            transport_agency_names = get_transit_agencies_names(step.transit_line.transit_agencies)
+            spider = dispatch_spider(transport_agency_names)
 
-            if "flixbus" in transport_agency_names:
-                yield crawler_process.crawl(FlixbusSpider,
-                                            request=SpiderRequest(step.departure_place_name,
-                                                                  step.arrival_place_name,
-                                                                  step.departure_datetime)
-                                            )
+            if spider is not None:
+                yield crawl_route_step(process, step, spider, name_resolvers)
 
     reactor.stop()
+
+
+@defer.inlineCallbacks
+def crawl_route_step(process: CrawlerProcess, route_leg: RouteLeg,
+                     spider: Type[BaseSpider], name_resolvers: list[NameResolverBase]):
+    departure_names = find_place_names(route_leg.departure_place_name, name_resolvers)
+    arrival_names = find_place_names(route_leg.arrival_place_name, name_resolvers)
+
+    for i, departure_name in enumerate(departure_names):
+        yield process.crawl(spider,
+                            request=SpiderRequest(departure_name,
+                                                  arrival_names[i],
+                                                  route_leg.departure_datetime))
+
+
+def get_transit_agencies_names(agencies: list[RouteLegTransitAgency]) -> list[str]:
+    return [i.name.lower() for i in agencies]
+
+
+def find_place_names(place_name: str, name_resolvers: list[NameResolverBase]):
+    names = [place_name]
+
+    for resolver in name_resolvers:
+        names.append(resolver.find_name(place_name))
+
+    return names
+
+
+def dispatch_spider(transport_agency_names: list[str]) -> Type[FlixbusSpider]:
+    spiders = {
+        "flixbus": FlixbusSpider
+    }
+
+    for name, value in spiders.items():
+        if name in transport_agency_names:
+            return value
 
 
 if __name__ == "__main__":
@@ -83,7 +80,6 @@ if __name__ == "__main__":
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
     result = google_finder.find_routes(departure, arrival, departure_datetime)
-    convert_place_names_to_official(result)
     # result = aux_result # use to skip the previous computations
     json_result = encode_json(result)
 
@@ -94,8 +90,10 @@ if __name__ == "__main__":
         get_pipeline_crawler_process_settings()
     )
 
-    crawl(crawler_process, result)
+    resolvers = [OpenStreetMapNameResolver()]
+
+    crawl(crawler_process, result.routes, resolvers)
     reactor.run()
 
-    with open("result.json", "r") as f:
-        print(f.read())
+    # with open("result.json", "r") as f:
+    #     print(f.read())
