@@ -13,17 +13,21 @@
 
 <Flex use={[[ref]]} style="position: relative">
     <TextInput label={label} disabled={$showCalendar} value={date.toLocaleDateString()}/>
+    {#if $showCalendar}
     <div class="popup">
-        {#if $showCalendar}
-            <Month month={date} date={date} onChange={(val) => date = val} locale="en-gb" />
-        {/if}
+        <Month month={date} date={date} onChange={(val) => date = val} locale="en-gb" />
     </div>
+    {/if}
 </Flex>
 
 
 <style>
     .popup {
         position: absolute;
-        top: calc(100% + 1rem);
+        top: calc(100%);
+        padding-top: 1rem;
+        border-radius: var(--svelteui-radii-sm);
+        background-color: var(--svelteui-colors-white);
+        border: 1px solid var(--svelteui-colors-gray200);
     }
 </style>
