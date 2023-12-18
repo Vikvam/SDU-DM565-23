@@ -14,6 +14,8 @@ if __name__ == "__main__":
 
     departure = "University of Southern Denmark, SDU"
     arrival = "ZOB Hamburg"
+
+    departure_datetime = datetime.datetime(2023, 12, 19, 16, 30)
     departure_datetime = datetime.datetime(2023, 12, 16, 16, 30)
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
