@@ -1,9 +1,10 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 from time import sleep
 
 from money import Money
 from scrapy.http import Response
 from selenium.common import NoSuchElementException
+from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -83,11 +84,22 @@ class DsbDenmarkSpider(BaseSpider):
             break
 
     def _insert_departure_time(self, driver):
+        max_time_traversals = 100
         departure_date = self._request.departure_datetime
-        departure_date = departure_date - timedelta(hours=1)
-        time = convert_datetime_to_time_str(departure_date)
-        selector = driver.find_element(By.CSS_SELECTOR, 'input[name="criteria[0].SearchTime"]')
-        self._insert_value_to_hidden_input(driver, selector, time)
+        departure_date = departure_date.replace(minute=15 * (departure_date.minute // 15))
+        departure_time = convert_datetime_to_time_str(departure_date)
+        input_css_selector = 'input[name="criteria[0].SearchTime"]'
+        self._click_button(driver, By.CSS_SELECTOR, input_css_selector)
+        input = driver.find_element(By.CSS_SELECTOR, input_css_selector)
+
+        for _ in range(max_time_traversals):
+            input_value = driver.execute_script("return arguments[0].value;", input)
+
+            if input_value == departure_time:
+                input.send_keys(Keys.ENTER)
+                break
+            else:
+                input.send_keys(Keys.DOWN)
 
     @staticmethod
     def _insert_value_to_hidden_input(driver, selector, value):
