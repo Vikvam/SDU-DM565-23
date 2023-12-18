@@ -26,3 +26,7 @@ def combine_date_with_time(datetime_val: datetime | str, time_val: str) -> datet
 
 def convert_str_to_time(value: str) -> time:
     return datetime.strptime(value, TIME_FORMAT).time()
+
+
+def convert_datetime_to_time_str(value: datetime) -> str:
+    return value.strftime(TIME_FORMAT)
