@@ -1,15 +1,9 @@
 import json
-<<<<<<< HEAD
 from datetime import datetime
 
 from backend.google_api.datetime_converter import convert_str_to_datetime
 from backend.json_serializer import write_to_json_file
 from backend.spiders.spider_base import SpiderItem
-=======
-
-from backend.google_api.datetime_converter import convert_str_to_datetime
-from backend.json_serializer import write_to_json_file
->>>>>>> origin/main
 
 
 class RoutePipeline:
@@ -24,7 +18,6 @@ class RoutePipeline:
     def process_item(self, item, spider):
         for route in self._result['routes']:
             for step in route['legs']:
-<<<<<<< HEAD
                 if (self._is_transit_agency_name_matching(step, item) and
                         self.are_item_timestamps_matching(step, item)):
                     step['price'] = {
@@ -55,21 +48,6 @@ class RoutePipeline:
     @staticmethod
     def is_time_matching(a: datetime, b: datetime) -> bool:
         return a.time() == b.time()
-=======
-                transit_agency_name = step['transit_line']['transit_agencies'][0]['name'].lower()
-
-                if transit_agency_name == item.transport_agent_name.lower():
-                    departure_datetime = convert_str_to_datetime(step['departure_datetime'])
-                    arrival_datetime = convert_str_to_datetime(step['arrival_datetime'])
-
-
-                    if (departure_datetime.time() == item.departure_datetime.time() and
-                            arrival_datetime.time() == item.arrival_date_time.time()):
-                        step['price'] = {
-                            "amount": "{:.2f}".format(item.price.amount),
-                            "currency:": item.price.currency
-                        }
->>>>>>> origin/main
 
     def close_spider(self, spider):
         self.erase_file_content(self._file)

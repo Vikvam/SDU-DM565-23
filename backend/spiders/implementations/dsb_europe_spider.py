@@ -48,7 +48,6 @@ class DsbEuropeSpider(BaseSpider):
 
         self._change_trip_to_one_way(driver)
         self._insert_departure_time(driver)
-<<<<<<< HEAD
         sleep(.4)
         self._insert_departure_date(driver)
 
@@ -56,15 +55,6 @@ class DsbEuropeSpider(BaseSpider):
         self._click_search_routes_button(driver)
         self._wait_for_search_results(driver)
         yield from self._process_result(driver)
-=======
-        sleep(.2)
-        self._insert_departure_date(driver)
-
-        sleep(.2)
-        self._click_search_routes_button(driver)
-        self._wait_for_search_results(driver)
-        self._process_result(driver)
->>>>>>> origin/main
 
     def _insert_place_name(self, driver, input_id, value):
         input = driver.find_element(By.ID, input_id)
@@ -108,16 +98,10 @@ class DsbEuropeSpider(BaseSpider):
             departure_month_year = self._request.departure_datetime.strftime("%B %Y")
 
             if calendar_year_month == departure_month_year:
-<<<<<<< HEAD
                 button_name = f"button[data-pika-day='{self._request.departure_datetime.day}']"
                 self._wait_for_calendar_button_to_be_clickable(driver, button_name)
                 self._click_button(driver, By.CSS_SELECTOR, button_name)
                 break
-=======
-                self._click_button(driver,
-                                   By.CSS_SELECTOR,
-                                   f"button[data-pika-day='{self._request.departure_datetime.day}']")
->>>>>>> origin/main
 
         self._wait_for_calendar_vanishing(driver)
 
@@ -137,15 +121,12 @@ class DsbEuropeSpider(BaseSpider):
             EC.invisibility_of_element_located((By.CLASS_NAME, 'pika-single'))
         )
 
-<<<<<<< HEAD
     def _wait_for_calendar_button_to_be_clickable(self, driver, button_name):
         WebDriverWait(driver, self._timeout).until(
             EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, button_name))
         )
 
-=======
->>>>>>> origin/main
     @staticmethod
     def _click_search_routes_button(driver):
         DsbEuropeSpider._click_button(driver, By.ID, "ShowOutboundActionId")
@@ -174,11 +155,7 @@ class DsbEuropeSpider(BaseSpider):
         arrival_datetime = combine_date_with_time(departure_datetime, arrival_time)
         price = self._get_route_price(inner)
 
-<<<<<<< HEAD
-        #self._print_route(departure_datetime, arrival_datetime, price)
-=======
-        self._print_route(departure_datetime, arrival_datetime, price)
->>>>>>> origin/main
+        # self._print_route(departure_datetime, arrival_datetime, price)
         return SpiderItem(
             self._request.departure_place,
             self._request.arrival_place,

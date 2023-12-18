@@ -8,10 +8,7 @@ from backend.google_api.google_route_finder import GoogleRouteFinder
 from backend.google_api.google_route_objects import ResponseBody, Route, RouteLeg, RouteLegTransitAgency
 from backend.json_serializer import encode_json, write_to_json_file
 from backend.name_resolvers.name_resolver_base import NameResolverBase
-<<<<<<< HEAD
 from backend.spiders.implementations.dsb_europe_spider import DsbEuropeSpider
-=======
->>>>>>> origin/main
 from backend.spiders.implementations.flixbus_spider import FlixbusSpider
 from backend.spiders.spider_base import BaseSpider, SpiderRequest
 
@@ -79,12 +76,8 @@ class RouteFinder:
     @staticmethod
     def _dispatch_spider(transport_agency_names: list[str]) -> Type[FlixbusSpider]:
         spiders = {
-<<<<<<< HEAD
             "flixbus": FlixbusSpider,
             "dsb": DsbEuropeSpider
-=======
-            "flixbus": FlixbusSpider
->>>>>>> origin/main
         }
 
         for name, value in spiders.items():
