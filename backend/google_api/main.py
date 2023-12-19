@@ -18,7 +18,7 @@ def print_routes(routes):
         print(f"Route #{i + 1}:")
 
         for j, step in enumerate(route.legs):
-            print(f" -> Step #{j + 1}: start: {step.departure_place_name}, end: {step.arrival_place_name}, "
+            print(f" -> Step #{j + 1}: start: {step.departure}, end: {step.arrival}, "
                   f"line: {step.transit_line.line_name}, provider: {step.transit_line.transit_agencies[0].name}")
 
 
