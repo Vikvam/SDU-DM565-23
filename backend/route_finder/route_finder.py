@@ -11,17 +11,18 @@ from backend.google_api.google_route_finder import GoogleRouteFinder
 from backend.google_api.google_route_objects import ResponseBody, Route, RouteLeg, RouteLegTransitAgency
 from backend.json_serializer import encode_json, write_to_json_file
 from backend.name_resolvers.name_resolver_base import NameResolverBase
+from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
 from backend.spiders.spider_base import BaseSpider, SpiderRequest
 
 
 class RouteFinder:
     _FILE_NAME = "result.json"
 
-    def __init__(self, google_route_finder: GoogleRouteFinder, dispatchers: list,
+    def __init__(self, google_route_finder: GoogleRouteFinder, dispatcher: MainSpiderDispatcher,
                  crawler_process: CrawlerProcess, name_resolvers: list[NameResolverBase]):
         self._logger = logging.getLogger()
         self._google_route_finder = google_route_finder
-        self._dispatchers = dispatchers
+        self._dispatcher = dispatcher
         self._name_resolvers = name_resolvers
         self._crawler_process = crawler_process
 
@@ -45,14 +46,10 @@ class RouteFinder:
     def _crawl(self, routes: list[Route]):
         for route in routes:
             for step in route.legs:
-                # transport_agency_names = self._get_transit_agencies_names(step.transit_line.transit_agencies)
-                spider = self._dispatch_spider(step)
+                spider = self._dispatcher.dispatch_spider(step)
 
                 if spider:
                     yield self._crawl_route_step(step, spider)
-
-                # for spider in spiders:
-                #    yield self._crawl_route_step(step, spider)
 
         reactor.stop()
 
@@ -73,34 +70,6 @@ class RouteFinder:
             names.append(resolver.find_name(place_name))
 
         return names
-
-    def _dispatch_spider(self, leg: RouteLeg) -> Type[BaseSpider] | None:
-        transit_agency_names = self._get_transit_agencies_names(leg.transit_line.transit_agencies)
-
-        for dispatcher in self._dispatchers:
-            if dispatcher['travel_agency'].lower() in transit_agency_names:
-                return dispatcher['dispatcher'].dispatch_spider(leg)
-
-        return None
-
-    @staticmethod
-    def _get_transit_agencies_names(agencies: list[RouteLegTransitAgency]) -> list[str]:
-        return [i.name.lower() for i in agencies]
-
-    # @staticmethod
-    # def _dispatch_spider(transport_agency_names: list[str]) -> list[Type[FlixbusSpider]]:
-    #     spiders_dict = {
-    #         "flixbus": [FlixbusSpider],
-    #         "dsb": [DsbDenmarkSpider, DsbEuropeSpider],
-    #     }
-    #
-    #     spiders = []
-    #
-    #     for name, value in spiders_dict.items():
-    #         if name in transport_agency_names:
-    #             spiders = value
-    #
-    #     return spiders
 
     def _fetch_result_from_file(self) -> dict:
         with open(self._FILE_NAME) as file:
