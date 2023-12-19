@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 
-from config import get_settings
-from google_api.google_route_finder import GoogleRouteFinder
+from backend.config import get_settings
+from backend.google_api.google_route_finder import GoogleRouteFinder
 
 app = FastAPI()
 app.add_middleware(

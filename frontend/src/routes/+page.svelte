@@ -23,27 +23,10 @@
 
     let journey = [
                 {
-                    "departure_place_name": "Campus Odense (Odense Letbane)",
-                    "arrival_place_name": "Odense Banegård (Odense Letbane)",
-                    "departure_datetime": "2023-12-16T18:41:00Z",
-                    "arrival_datetime": "2023-12-16T18:59:00Z",
-                    "transit_line": {
-                        "line_name": "L",
-                        "vehicle_type": "Tram",
-                        "transit_agencies": [
-                            {
-                                "name": "Odense Letbane",
-                                "uri": "https://www.odenseletbane.dk/"
-                            }
-                        ]
-                    },
-                    "price": 12
-                },
-                {
-                    "departure_place_name": "Odense st - Gleis 3",
+                    "departure_place_name": "Odense St.",
                     "arrival_place_name": "Kolding st",
-                    "departure_datetime": "2023-12-16T19:13:00Z",
-                    "arrival_datetime": "2023-12-16T19:49:00Z",
+                    "departure_datetime": "2023-12-16T18:13:00Z",
+                    "arrival_datetime": "2023-12-16T18:49:00Z",
                     "transit_line": {
                         "line_name": "IC",
                         "vehicle_type": "Train",
@@ -54,24 +37,87 @@
                             }
                         ]
                     },
-                    "price": 5
+                    "price": 12
                 },
                 {
-                    "departure_place_name": "Kolding",
-                    "arrival_place_name": "ZOB Hamburg",
-                    "departure_datetime": "2023-12-16T20:50:00Z",
-                    "arrival_datetime": "2023-12-17T00:40:00Z",
+                    "departure_place_name": "Kolding st",
+                    "arrival_place_name": "Flensburg",
+                    "departure_datetime": "2023-12-16T18:58:00Z",
+                    "arrival_datetime": "2023-12-16T20:07:00Z",
                     "transit_line": {
-                        "line_name": "FlixBus N74",
-                        "vehicle_type": "Bus",
+                        "line_name": "IC",
+                        "vehicle_type": "Train",
                         "transit_agencies": [
                             {
-                                "name": "FlixBus",
-                                "uri": "https://global.flixbus.com/"
+                                "name": "DSB",
+                                "uri": "http://www.dsb.dk/"
+                            },
+                            {
+                                "name": "Dänische Staatsbahnen",
+                                "uri": "https://www.thetrainline.com/de/bahnunternehmen/dsb"
                             }
                         ]
                     },
-                    "price": 7
+                    "price": 16
+                },
+                {
+                    "departure_place_name": "Flensburg",
+                    "arrival_place_name": "Neumünster",
+                    "departure_datetime": "2023-12-16T20:15:00Z",
+                    "arrival_datetime": "2023-12-16T21:22:00Z",
+                    "transit_line": {
+                        "line_name": "RE7",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "DB Regio AG",
+                                "uri": "http://www.bahn.de/"
+                            },
+                            {
+                                "name": "Hamburger Verkehrsverbund (hvv)",
+                                "uri": "http://www.hvv.de/"
+                            }
+                        ]
+                    },
+                    "price": 14
+                },
+                {
+                    "departure_place_name": "Neumünster",
+                    "arrival_place_name": "Hamburg Central Station",
+                    "departure_datetime": "2023-12-16T21:28:00Z",
+                    "arrival_datetime": "2023-12-16T22:17:00Z",
+                    "transit_line": {
+                        "line_name": "RE7",
+                        "vehicle_type": "Train",
+                        "transit_agencies": [
+                            {
+                                "name": "DB Regio AG",
+                                "uri": "http://www.bahn.de/"
+                            },
+                            {
+                                "name": "Hamburger Verkehrsverbund (hvv)",
+                                "uri": "http://www.hvv.de/"
+                            }
+                        ]
+                    },
+                    "price": 13
+                },
+                {
+                    "departure_place_name": "Hamburg Central Station",
+                    "arrival_place_name": "München Hauptbahnhof",
+                    "departure_datetime": "2023-12-16T22:28:00Z",
+                    "arrival_datetime": "2023-12-17T06:04:00Z",
+                    "transit_line": {
+                        "line_name": "ICE1081",
+                        "vehicle_type": "High-speed train",
+                        "transit_agencies": [
+                            {
+                                "name": "DB Fernverkehr AG",
+                                "uri": "https://www.bahn.de/"
+                            }
+                        ]
+                    },
+                    "price": 34
                 }
             ]
 </script>
