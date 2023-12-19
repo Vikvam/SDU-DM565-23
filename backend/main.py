@@ -19,8 +19,8 @@ if __name__ == "__main__":
     logging.basicConfig(**get_logging_settings())
     configure_logging(install_root_handler=False)
 
-    departure = "Odense"
-    arrival = "Munich"
+    departure = "Berlin"
+    arrival = "Hamburg"
     departure_datetime = "2024-01-31T00:00:00Z"
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)

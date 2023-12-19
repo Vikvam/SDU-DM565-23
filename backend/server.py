@@ -38,6 +38,7 @@ class SearchData(BaseModel):
 
 @app.post("/search")
 async def search(search_data: SearchData, route_finder=Depends(get_route_finder)):
+    print(search_data)
     result = route_finder.find_routes(search_data.from_name, search_data.to_name, search_data.departure)
     json_result = jsonable_encoder(result)
     return JSONResponse(content=json_result)
@@ -45,10 +46,10 @@ async def search(search_data: SearchData, route_finder=Depends(get_route_finder)
 
 @app.get("/search_example")
 async def search(route_finder=Depends(get_route_finder)):
-    # result = route_finder.find_routes("Berlin", "Munich", "2024-01-31T00:00:00Z")
-    # print(result)
-    # json_result = jsonable_encoder(result)
-    return JSONResponse(content={"Hi": ":("})
+    result = route_finder.find_routes("Berlin", "Munich", "2024-01-31T00:00:00Z")
+    print(result)
+    json_result = jsonable_encoder(result)
+    return JSONResponse(content=json_result)
 
 
 if __name__ == "__main__":

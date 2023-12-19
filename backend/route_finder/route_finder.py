@@ -12,7 +12,7 @@ from backend.google_api.google_route_objects import ResponseBody, Route, RouteLe
 from backend.json_serializer import encode_json, write_to_json_file
 from backend.name_resolvers.name_resolver_base import NameResolverBase
 from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
-from backend.spiders.spider_base import BaseSpider, SpiderRequest
+from backend.spiders.spider_base import BaseSpider, SpiderRequest, run_spider
 
 
 class RouteFinder:
@@ -31,9 +31,11 @@ class RouteFinder:
 
         result = self._google_route_finder.find_routes(departure, arrival, departure_datetime)
         self._write_result_to_file(result)
+        self._logger.info(f"Google result found")
 
         self._crawl(result.routes)
-        reactor.run()
+        # reactor.run()
+        self._logger.info(f"Spiders results found")
 
         return self._fetch_result_from_file()
 
@@ -42,25 +44,23 @@ class RouteFinder:
         with open(self._FILE_NAME, "w") as out:
             write_to_json_file(out, json_result)
 
-    @defer.inlineCallbacks
     def _crawl(self, routes: list[Route]):
         for route in routes:
             for step in route.legs:
                 spider = self._dispatcher.dispatch_spider(step)
-
+                # print(step.transit_line.transit_agencies, spider) # TODO: fix dispatcher
                 if spider:
-                    yield self._crawl_route_step(step, spider)
+                    self._crawl_route_step(step, spider)
 
-        reactor.stop()
-
-    @defer.inlineCallbacks
     def _crawl_route_step(self, route_leg: RouteLeg, spider: Type[BaseSpider]):
         departure_names = self._find_place_names(route_leg.departure.name)
         arrival_names = self._find_place_names(route_leg.arrival.name)
         journey_names = list(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
-            yield self._crawler_process.crawl(spider, equest=SpiderRequest(departure, arrival, route_leg.departure_datetime))
+            request = SpiderRequest(departure, arrival, route_leg.departure_datetime)
+            run_spider(spider, request)
+            self._logger.info(f"Crawled {spider.name} for {request}, {route_leg.transit_line.transit_agencies}")
 
     def _find_place_names(self, place_name: str):
         names = [place_name]

@@ -30,7 +30,7 @@ def get_basic_crawler_process_settings():
         "SELENIUM_DRIVER_NAME": get_settings().selenium_driver_name,
         "SELENIUM_DRIVER_EXECUTABLE_PATH": get_settings().selenium_driver_executable_path,
         "SELENIUM_DRIVER_ARGUMENTS": ["--headless"],
-        "LOG_LEVEL": "WARNING"
+        "LOG_LEVEL": "INFO"
     }, priority=0)
 
 
@@ -38,15 +38,15 @@ def get_basic_crawler_process_settings():
 def get_pipeline_crawler_process_settings():
     settings = get_basic_crawler_process_settings()
     settings.set("ITEM_PIPELINES", {
-        "backend.spiders.pipelines.RoutePipeline": 800
-    })
+        "backend.spiders.pipelines.RoutePipeline": 900
+    }, priority=0)
     return settings
 
 
 @lru_cache
 def get_logging_settings():
     return {
-        "level": logging.WARNING,
+        "level": logging.INFO,
         "format": "%(asctime)s [%(name)s %(levelname)s]: %(message)s",
         "datefmt": "%H:%M:%S"
     }

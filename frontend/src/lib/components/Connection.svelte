@@ -2,8 +2,8 @@
     import {Text} from "@svelteuidev/core";
 
 
-    export let departurePlaceName;
-    export let arrivalPlaceName;
+    export let departure;
+    export let arrival;
     export let departureDatetime;
     export let arrivalDatetime;
     export let lineName;
@@ -20,12 +20,12 @@
         <Text>{lineName}</Text>
     </div>
     <div class="place-box place-box-left">
-        <Text weight={"bold"}>{departurePlaceName}</Text>
+        <Text weight={"bold"}>{departure.name}</Text>
         <Text>{departureDatetime.date}</Text>
         <Text>{departureDatetime.time}</Text>
     </div>
     <div class="place-box place-box-right">
-        <Text weight={"bold"}>{arrivalPlaceName}</Text>
+        <Text weight={"bold"}>{arrival.name}</Text>
         <Text>{arrivalDatetime.date}</Text>
         <Text>{arrivalDatetime.time}</Text>
     </div>

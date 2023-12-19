@@ -1,9 +1,10 @@
 import json
+import logging
 from datetime import datetime
 
 from backend.google_api.datetime_converter import convert_str_to_datetime
 from backend.json_serializer import write_to_json_file
-from backend.spiders.spider_base import SpiderItem
+from backend.spiders.spider_base import SpiderItem, BaseSpider
 
 
 class RoutePipeline:
@@ -11,11 +12,12 @@ class RoutePipeline:
         self._file = None
         self._result = {}
 
-    def open_spider(self, spider):
+    def open_spider(self, spider: BaseSpider):
         self._file = open("result.json", "r+")
         self._result = json.load(self._file)
 
-    def process_item(self, item, spider):
+    def process_item(self, item, spider: BaseSpider):
+        print("Pipeline:", item)
         for route in self._result['routes']:
             for step in route['legs']:
                 if (self._is_transit_agency_name_matching(step, item) and
@@ -24,6 +26,7 @@ class RoutePipeline:
                         "amount": "{:.2f}".format(item.price.amount),
                         "currency:": item.price.currency
                     }
+        return item
 
     @staticmethod
     def _is_transit_agency_name_matching(step: dict, spider_item: SpiderItem) -> bool:

@@ -85,8 +85,7 @@ class FlixbusSpider(BaseSpider):
         destination_time = time_selector[1]
         departure_place, arrival_place = selector.xpath(
             ".//div[contains(@class, 'LocationsHorizontal__station___ItGEv')]/span[@aria-hidden='true']/text()").getall()
-        print(price, departure_place, arrival_place, origin_time, destination_time)
-        return SpiderItem(
+        spider_item = SpiderItem(
             departure_place,
             arrival_place,
             combine_date_with_time(self._request.departure_datetime, origin_time),
@@ -94,3 +93,5 @@ class FlixbusSpider(BaseSpider):
             convert_price_to_money(price[1:], self.DEFAULT_CURRENCY),
             self._travel_agency
         )
+        print(spider_item)
+        return spider_item

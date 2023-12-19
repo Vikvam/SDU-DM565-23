@@ -148,7 +148,10 @@ class GoogleRouteFinder:
 
     @staticmethod
     def _convert_transit_line_to_object(transit_line):
-        line_name = transit_line['nameShort']
+        try:
+            line_name = transit_line['nameShort']
+        except KeyError:
+            line_name = transit_line['name']
         vehicle_type = transit_line['vehicle']['name']['text']
         transit_agencies = [RouteLegTransitAgency(t['name'], t['uri']) for t in transit_line['agencies']]
         return RouteLegTransitLine(line_name, vehicle_type, transit_agencies)
