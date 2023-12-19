@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from backend.google_api.datetime_converter import combine_date_with_time, convert_datetime_to_str
 from backend.google_api.google_route_objects import (ResponseBody, RouteLegTransitAgency,
-                                                     RouteLegTransitLine, RouteLeg, Route)
+                                                     RouteLegTransitLine, RouteLeg, Route, RoutePlaceDetails)
 
 
 class GoogleRouteFinder:
@@ -113,19 +113,34 @@ class GoogleRouteFinder:
         stop_details = transit_details['stopDetails']
         localized_values = transit_details['localizedValues']
 
-        departure_place_name = stop_details['departureStop']['name']
-        arrival_place_name = stop_details['arrivalStop']['name']
+        # departure_place_name = stop_details['departureStop']['name']
+        # departure_longitude = stop_details['departureStop']['location']['latLng']['longitude']
+        # departure_latitude = stop_details['departureStop']['location']['latLng']['latitude']
+        # departure = RoutePlaceDetails(departure_place_name, departure_longitude, departure_latitude)
+        departure = GoogleRouteFinder._get_place_from_route_leg(stop_details['departureStop'])
+        arrival = GoogleRouteFinder._get_place_from_route_leg(stop_details['arrivalStop'])
+        # arrival_place_name = stop_details['arrivalStop']['name']
+
         departure_datetime = combine_date_with_time(
             stop_details['departureTime'],
             GoogleRouteFinder._get_time_from_localized_values(localized_values, 'departureTime')
         )
+
         arrival_datetime = combine_date_with_time(
             stop_details['arrivalTime'],
             GoogleRouteFinder._get_time_from_localized_values(localized_values, 'arrivalTime')
         )
+
         transit_line = GoogleRouteFinder._convert_transit_line_to_object(transit_details['transitLine'])
 
-        return RouteLeg(departure_place_name, arrival_place_name, departure_datetime, arrival_datetime, transit_line)
+        return RouteLeg(departure, arrival, departure_datetime, arrival_datetime, transit_line)
+
+    @staticmethod
+    def _get_place_from_route_leg(stop_details_stop):
+        departure_place_name = stop_details_stop['name']
+        departure_longitude = stop_details_stop['location']['latLng']['longitude']
+        departure_latitude = stop_details_stop['location']['latLng']['latitude']
+        return RoutePlaceDetails(departure_place_name, departure_longitude, departure_latitude)
 
     @staticmethod
     def _get_time_from_localized_values(localized_values, direction):

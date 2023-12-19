@@ -6,6 +6,7 @@ __pycache__/
 /.code
 
 backend/result.json
+backend/spiders/result.json
 
 # GOOGLE_MAPS_API_KEY
 conf.properties
