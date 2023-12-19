@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # process.crawl(DsbDenmarkSpider, request=request)
     process.crawl(DsbEuropeSpider, request=request)
-    # process.crawl(FlixbusSpider, request)
+    process.crawl(FlixbusSpider, request)
     # process.crawl(DBSpider, request=request)
 
-    process.start()
+    # process.start()

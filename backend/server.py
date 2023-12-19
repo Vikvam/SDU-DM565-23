@@ -44,7 +44,6 @@ async def search(search_data: SearchData, route_finder=Depends(get_route_finder)
 @app.get("/search_example")
 async def search(route_finder=Depends(get_route_finder)):
     result = route_finder.find_routes("Berlin", "Munich", "2024-01-31T00:00:00Z")
-    print(result)
     json_result = jsonable_encoder(result)
     return JSONResponse(content={})
 
