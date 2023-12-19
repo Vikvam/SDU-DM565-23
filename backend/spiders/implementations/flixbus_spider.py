@@ -91,6 +91,6 @@ class FlixbusSpider(BaseSpider):
             arrival_place,
             combine_date_with_time(self._request.departure_datetime, origin_time),
             combine_date_with_time(self._request.departure_datetime, destination_time),
-            convert_price_to_money(price, self.DEFAULT_CURRENCY),
+            convert_price_to_money(price[1:], self.DEFAULT_CURRENCY),
             self._travel_agency
         )

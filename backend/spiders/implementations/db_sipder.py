@@ -9,6 +9,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from math import nan
 
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
@@ -90,24 +91,25 @@ class DBSpider(BaseSpider):
 
     def parse_route(self, selector: Selector):
         price = selector.xpath(".//span[contains(@class, 'reise-preis__preis')]/text()").get()
-        origin_time = selector.xpath(".//time[contains(@class, 'reiseplan__uebersicht-uhrzeit-sollzeit')]/text()").get()
-        destination_time = "TODO"
+        origin_time = selector.xpath(".//div[contains(@class, 'reiseplan__uebersicht-uhrzeit-von')]/time/text()").get()
+        destination_time = selector.xpath(".//div[contains(@class, 'reiseplan__uebersicht-uhrzeit-nach')]/time/text()").get()
         departure_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-start-value')]/text()").get()
         arrival_place = selector.xpath(".//span[contains(@class, 'test-reise-beschreibung-ziel-value')]/text()").get()
-        print(price, departure_place, arrival_place, origin_time, destination_time)
-        return SpiderItem(
+        spider_item = SpiderItem(
             departure_place,
             arrival_place,
             combine_date_and_time(self._request.departure_datetime, origin_time),
-            combine_date_and_time(self._request.departure_datetime, origin_time),  # TODO
+            combine_date_and_time(self._request.departure_datetime, destination_time),
             self.get_money_from_price(price),
             self._travel_agency
         )
+        print(spider_item)
+        return spider_item
 
     def get_money_from_price(self, price) -> Money:
         if not price:
-            return convert_price_to_money(price, self.DEFAULT_CURRENCY)
+            return Money(nan, self.DEFAULT_CURRENCY)      # TODO NaN or None
         price, currency = price.split()
         if currency == "€": currency = "EUR"
         else: raise AssertionError("Invalid currency")
-        return convert_price_to_money(price.replace(",", "."), currency)
+        return Money(price.replace(",", "."), currency)
