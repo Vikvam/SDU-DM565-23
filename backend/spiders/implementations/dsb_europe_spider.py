@@ -51,7 +51,6 @@ class DsbEuropeSpider(BaseSpider):
         sleep(.4)
         self._insert_departure_date(driver)
 
-        sleep(.4)
         self._click_search_routes_button(driver)
         self._wait_for_search_results(driver)
         yield from self._process_result(driver)
@@ -98,8 +97,9 @@ class DsbEuropeSpider(BaseSpider):
             departure_month_year = self._request.departure_datetime.strftime("%B %Y")
 
             if calendar_year_month == departure_month_year:
-                button_name = f"button[data-pika-day='{self._request.departure_datetime.day}']"
+                button_name = f"td[data-day='{self._request.departure_datetime.day}']"
                 self._wait_for_calendar_button_to_be_clickable(driver, button_name)
+                sleep(.2)
                 self._click_button(driver, By.CSS_SELECTOR, button_name)
                 break
 
