@@ -27,8 +27,8 @@ class RoutePlaceDetails:
 
 @dataclass
 class RouteLeg:
-    departure_place_name: RoutePlaceDetails
-    arrival_place_name: RoutePlaceDetails
+    departure: RoutePlaceDetails
+    arrival: RoutePlaceDetails
     departure_datetime: datetime
     arrival_datetime: datetime
     transit_line: RouteLegTransitLine
