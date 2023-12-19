@@ -9,6 +9,7 @@ from starlette.responses import JSONResponse
 from backend.config import get_settings, get_pipeline_crawler_process_settings
 from backend.google_api.google_route_finder import GoogleRouteFinder
 from backend.name_resolvers.openstreet_name_resolver import OpenStreetMapNameResolver
+from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
 from backend.route_finder.route_finder import RouteFinder
 
 app = FastAPI()
@@ -22,6 +23,7 @@ app.add_middleware(
 
 route_finder = RouteFinder(
     GoogleRouteFinder(get_settings().google_maps_api_key),
+    MainSpiderDispatcher(),
     CrawlerProcess(get_pipeline_crawler_process_settings()),
     [OpenStreetMapNameResolver()]
 )
@@ -43,10 +45,10 @@ async def search(search_data: SearchData, route_finder=Depends(get_route_finder)
 
 @app.get("/search_example")
 async def search(route_finder=Depends(get_route_finder)):
-    result = route_finder.find_routes("Berlin", "Munich", "2024-01-31T00:00:00Z")
-    print(result)
-    json_result = jsonable_encoder(result)
-    return JSONResponse(content={})
+    # result = route_finder.find_routes("Berlin", "Munich", "2024-01-31T00:00:00Z")
+    # print(result)
+    # json_result = jsonable_encoder(result)
+    return JSONResponse(content={"Hi": ":("})
 
 
 if __name__ == "__main__":
