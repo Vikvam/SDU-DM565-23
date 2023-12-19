@@ -3,6 +3,7 @@ from typing import Type
 
 from backend.google_api.google_route_objects import RouteLeg, RouteLegTransitAgency
 from backend.route_finder.dispatchers.base_spider_dispatcher import BaseSpiderDispatcher
+from backend.route_finder.dispatchers.implementations.db_spider_dispatcher import DbSpiderDispatcher
 from backend.route_finder.dispatchers.implementations.dsb_spider_dispatcher import DsbSpiderDispatcher
 from backend.route_finder.dispatchers.implementations.flixbus_spider_dispatcher import FlixbusSpiderDispatcher
 from backend.spiders.spider_base import BaseSpider
@@ -18,7 +19,8 @@ class DispatcherConnector:
 class MainSpiderDispatcher(BaseSpiderDispatcher):
     connectors = [
         DispatcherConnector("flixbus", "https://global.flixbus.com/", FlixbusSpiderDispatcher()),
-        DispatcherConnector("dsb", "http://www.dsb.dk/", DsbSpiderDispatcher())
+        DispatcherConnector("dsb", "http://www.dsb.dk/", DsbSpiderDispatcher()),
+        #DispatcherConnector("db", "https://www.bahn.de/", DbSpiderDispatcher())
     ]
 
     def dispatch_spider(self, leg: RouteLeg) -> Type[BaseSpider] | None:
