@@ -1,25 +1,40 @@
 <script>
     import Calendar from "$lib/components/Calendar.svelte";
-    import {Button, Flex, TextInput} from "@svelteuidev/core";
+    import {Button, Flex, Loader, TextInput} from "@svelteuidev/core";
     import Journey from "$lib/components/Journey.svelte";
+    import {onMount} from "svelte";
 
-    let from = "";
-    let to = "";
-    let departure = new Date();
+    let from = "Odense";
+    let to = "Berlin";
+    let departure = new Date("01/19/2024, 7:36:50 PM");
+
+    async function test() {
+        console.log("Requested test.")
+        const response = await fetch("http://localhost:8000/search_example", {method: "GET"})
+        console.log("Response:", response);
+    }
+    onMount(test)
 
     async function onSearch() {
         const requestBody = {from_name: from, to_name: to, departure: departure.toLocaleDateString()};
-        console.log(requestBody);
-        const response = await fetch("http://localhost:8000/search", {
+        isLoading = true;
+        console.log("Sent request:", requestBody);
+        const response = await fetch("https://localhost:8000/search", {
             method: "POST",
             body: JSON.stringify(requestBody),
             mode: "cors",
             headers: {"Content-Type": "application/json"}
         })
-        console.log(response);
-        if (response.status === 200) console.log(await response.json());
+        isLoading = false;
+        console.log("Response:", response);
+        if (response.status === 200) {
+            let json = await response.json();
+            jouneys = json["routes"].map(i => i["legs"]);
+        }
     }
 
+    let isLoading = false;
+    let jouneys = [];
 
     let journey = [
                 {
@@ -129,7 +144,13 @@
     <Button on:click={onSearch}>Search</Button>
 </div>
 
-<Journey connections={journey}/>
+{#if jouneys.length > 0}
+    {#each jouneys as journey}
+        <Journey connections={journey}/>
+    {/each}
+{:else if isLoading}
+    <Loader variant='circle' />
+{/if}
 
 <style>
     :global(body) {

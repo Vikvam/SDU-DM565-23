@@ -3,6 +3,7 @@ from functools import lru_cache
 
 from dotenv import load_dotenv, find_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from scrapy.settings import SettingsAttribute, Settings as ScrapySettins
 
 load_dotenv(find_dotenv(".env"))
 
@@ -22,31 +23,30 @@ def get_settings():
 
 @lru_cache
 def get_basic_crawler_process_settings():
-    return {
+    return ScrapySettins({
         "DOWNLOADER_MIDDLEWARES": {
             "backend.spiders.selenium_middleware.SeleniumMiddleware": 800,
         },
         "SELENIUM_DRIVER_NAME": get_settings().selenium_driver_name,
         "SELENIUM_DRIVER_EXECUTABLE_PATH": get_settings().selenium_driver_executable_path,
-        "SELENIUM_DRIVER_ARGUMENTS": [],  # ["--headless"],
-        "LOG_LEVEL": "WARNING",
-    }
+        "SELENIUM_DRIVER_ARGUMENTS": ["--headless"],
+        "LOG_LEVEL": "WARNING"
+    }, priority=0)
 
 
 @lru_cache
 def get_pipeline_crawler_process_settings():
     settings = get_basic_crawler_process_settings()
-    settings["ITEM_PIPELINES"] = {
+    settings.set("ITEM_PIPELINES", {
         "backend.spiders.pipelines.RoutePipeline": 800
-    }
-
+    })
     return settings
 
 
 @lru_cache
 def get_logging_settings():
     return {
-        "level": logging.INFO,
-        "format": "%(asctime)s [%(levelname)s]: %(message)s",
+        "level": logging.WARNING,
+        "format": "%(asctime)s [%(name)s %(levelname)s]: %(message)s",
         "datefmt": "%H:%M:%S"
     }

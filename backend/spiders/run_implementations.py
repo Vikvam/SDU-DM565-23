@@ -1,5 +1,7 @@
 from datetime import datetime
 from scrapy.crawler import CrawlerProcess
+from scrapy.settings import Settings
+
 from backend.config import get_basic_crawler_process_settings, get_pipeline_crawler_process_settings
 from backend.spiders.implementations.dsb_denmark_spider import DsbDenmarkSpider
 from backend.spiders.implementations.dsb_europe_spider import DsbEuropeSpider
@@ -15,8 +17,8 @@ if __name__ == "__main__":
     process = CrawlerProcess(get_basic_crawler_process_settings())
 
     # process.crawl(DsbDenmarkSpider, request=request)
-    # process.crawl(DsbEuropeSpider, request=request)
+    process.crawl(DsbEuropeSpider, request=request)
     # process.crawl(FlixbusSpider, request)
-    process.crawl(DBSpider, request=request)
+    # process.crawl(DBSpider, request=request)
 
     process.start()

@@ -24,7 +24,7 @@ class RouteFinder:
         self._name_resolvers = name_resolvers
         self._crawler_process = crawler_process
 
-    def find_routes(self, departure: str, arrival: str, departure_datetime: datetime) -> dict:
+    def find_routes(self, departure: str, arrival: str, departure_datetime: str) -> dict:
         self._logger.info(f"Searching... ('{departure}', '{arrival}', {departure_datetime})")
 
         result = self._google_route_finder.find_routes(departure, arrival, departure_datetime)
