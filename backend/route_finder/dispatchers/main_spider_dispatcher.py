@@ -20,7 +20,7 @@ class MainSpiderDispatcher(BaseSpiderDispatcher):
     connectors = [
         DispatcherConnector("flixbus", "https://global.flixbus.com/", FlixbusSpiderDispatcher()),
         DispatcherConnector("dsb", "http://www.dsb.dk/", DsbSpiderDispatcher()),
-        #DispatcherConnector("db", "https://www.bahn.de/", DbSpiderDispatcher())
+        DispatcherConnector("db", "https://www.bahn.de/", DbSpiderDispatcher())
     ]
 
     def dispatch_spider(self, leg: RouteLeg) -> Type[BaseSpider] | None:

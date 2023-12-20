@@ -71,7 +71,7 @@ class DBSpider(BaseSpider):
 
         def selenium_url_search(driver):
             url = driver.current_url
-            url = url.split("&hd=")[0] + f"&hd={self._request.departure_datetime.strftime('%Y-%m-%d')}"
+            url = url.split("&hd=")[0] + f"&hd={self._request.departure_datetime.strftime('%Y-%m-%dT%H:%M:00')}"
             driver.get(url)
             print(f"DB search: {url}")
 
@@ -103,7 +103,7 @@ class DBSpider(BaseSpider):
             self.get_money_from_price(price),
             self._travel_agency
         )
-        print(spider_item)
+        # print(spider_item)
         return spider_item
 
     def get_money_from_price(self, price) -> Money:

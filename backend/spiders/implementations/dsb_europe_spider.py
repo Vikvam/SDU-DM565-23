@@ -162,7 +162,7 @@ class DsbEuropeSpider(BaseSpider):
             price,
             self.TRAVEL_AGENCY
         )
-        print(spider_item)
+        # print(spider_item)
         return spider_item
 
     @staticmethod

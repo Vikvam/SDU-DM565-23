@@ -48,7 +48,7 @@ class RouteFinder:
         for route in routes:
             for step in route.legs:
                 spider = self._dispatcher.dispatch_spider(step)
-                # print(step.transit_line.transit_agencies, spider) # TODO: fix dispatcher
+                print(step.transit_line.transit_agencies, spider) # TODO: fix dispatcher
                 if spider:
                     self._crawl_route_step(step, spider)
 
