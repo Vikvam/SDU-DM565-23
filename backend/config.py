@@ -9,6 +9,7 @@ load_dotenv(find_dotenv(".env"))
 
 class Settings(BaseSettings):
     google_maps_api_key: str
+    skyscanner_api_key: str
     selenium_driver_name: str
     selenium_driver_executable_path: str
 
