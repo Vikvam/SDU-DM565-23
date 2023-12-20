@@ -26,7 +26,7 @@ class RouteFinder:
         self._name_resolvers = name_resolvers
         self._crawler_process = crawler_process
 
-    def find_routes(self, departure: str, arrival: str, departure_datetime: datetime) -> dict:
+    def find_routes(self, departure: str, arrival: str, departure_datetime: str) -> dict:
         self._logger.info(f"Searching... ('{departure}', '{arrival}', {departure_datetime})")
 
         result = self._google_route_finder.find_routes(departure, arrival, departure_datetime)
@@ -60,8 +60,7 @@ class RouteFinder:
         journey_names = list(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
-            yield self._crawler_process.crawl(spider,
-                                              request=SpiderRequest(departure, arrival, route_leg.departure_datetime))
+            yield self._crawler_process.crawl(spider, equest=SpiderRequest(departure, arrival, route_leg.departure_datetime))
 
     def _find_place_names(self, place_name: str):
         names = [place_name]

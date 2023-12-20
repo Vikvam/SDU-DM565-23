@@ -1,3 +1,5 @@
+import logging
+
 import scrapy
 from abc import ABC
 from dataclasses import dataclass
@@ -30,3 +32,4 @@ class BaseSpider(scrapy.Spider, ABC):
         self._travel_agency = travel_agency
         self._request = request
         self._timeout = timeout
+        # self.settings.set("LOG_LEVEL", "INFO")

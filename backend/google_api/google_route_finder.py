@@ -32,10 +32,10 @@ class GoogleRouteFinder:
     def __init__(self, api_key):
         self.request_headers["X-Goog-Api-Key"] = api_key
 
-    def find_routes(self, start_address: str, end_address: str, departure_time: datetime):
+    def find_routes(self, start_address: str, end_address: str, departure_datetime: str):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
-        self.request_body["departureTime"] = convert_datetime_to_str(departure_time)
+        self.request_body["departureTime"] = departure_datetime
 
         try:
             result = self._send_request()

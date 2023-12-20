@@ -131,9 +131,8 @@ class DsbEuropeSpider(BaseSpider):
     def _click_search_routes_button(driver):
         DsbEuropeSpider._click_button(driver, By.ID, "ShowOutboundActionId")
 
-    @staticmethod
-    def _wait_for_search_results(driver):
-        WebDriverWait(driver, 10).until(
+    def _wait_for_search_results(self, driver):
+        WebDriverWait(driver, self._timeout).until(
             EC.presence_of_element_located((By.ID, "OutboundTrainSelectionZone")))
 
     def _process_result(self, driver):
@@ -155,8 +154,7 @@ class DsbEuropeSpider(BaseSpider):
         arrival_datetime = combine_date_with_time(departure_datetime, arrival_time)
         price = self._get_route_price(inner)
 
-        # self._print_route(departure_datetime, arrival_datetime, price)
-        return SpiderItem(
+        spider_item = SpiderItem(
             self._request.departure_place,
             self._request.arrival_place,
             departure_datetime,
@@ -164,6 +162,8 @@ class DsbEuropeSpider(BaseSpider):
             price,
             self.TRAVEL_AGENCY
         )
+        print(spider_item)
+        return spider_item
 
     @staticmethod
     def _get_route_time(time_table_selector, class_name):
