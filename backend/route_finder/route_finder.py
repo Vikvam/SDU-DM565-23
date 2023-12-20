@@ -11,24 +11,34 @@ from backend.google_api.google_route_objects import ResponseBody, Route, RouteLe
 from backend.json_serializer import encode_json, write_to_json_file
 from backend.name_resolvers.name_resolver_base import NameResolverBase
 from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
+from backend.route_finder.flight_appender import FlightAppender
 from backend.spiders.spider_base import BaseSpider, SpiderRequest
 
 
 class RouteFinder:
     _FILE_NAME = "result.json"
 
-    def __init__(self, google_route_finder: GoogleRouteFinder, dispatcher: MainSpiderDispatcher,
-                 crawler_process: CrawlerProcess, name_resolvers: list[NameResolverBase]):
+    def __init__(self, google_route_finder: GoogleRouteFinder,
+                 flight_appender: FlightAppender,
+                 dispatcher: MainSpiderDispatcher,
+                 crawler_process: CrawlerProcess,
+                 name_resolvers: list[NameResolverBase]):
         self._logger = logging.getLogger()
         self._google_route_finder = google_route_finder
+        self._flight_appender = flight_appender
         self._dispatcher = dispatcher
         self._name_resolvers = name_resolvers
         self._crawler_process = crawler_process
 
-    def find_routes(self, departure: str, arrival: str, departure_datetime: str) -> dict:
+    def find_routes(self, departure: str, arrival: str, departure_datetime: str,
+                    should_include_flight: bool = True) -> dict:
         self._logger.info(f"Searching... ('{departure}', '{arrival}', {departure_datetime})")
 
         result = self._google_route_finder.find_routes(departure, arrival, departure_datetime)
+
+        if should_include_flight:
+            result = self._flight_appender.append_flight_route(result)
+
         self._write_result_to_file(result)
 
         self._crawl(result.routes)
@@ -59,7 +69,8 @@ class RouteFinder:
         journey_names = list(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
-            yield self._crawler_process.crawl(spider, equest=SpiderRequest(departure, arrival, route_leg.departure_datetime))
+            yield self._crawler_process.crawl(spider,
+                                              equest=SpiderRequest(departure, arrival, route_leg.departure_datetime))
 
     def _find_place_names(self, place_name: str):
         names = [place_name]

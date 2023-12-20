@@ -1,19 +1,9 @@
-from datetime import date, timedelta
-from enum import Enum, auto
-
 import requests
 
-from backend.flights.nereast_airport_finder import NearestAirportFinder
-from backend.flights.skyscanner_flight_finder import SkyscannerFlightFinder, SkyscannerRequest, QueryLeg
-from backend.google_api.datetime_converter import combine_date_with_time, convert_datetime_to_str, \
-    convert_str_to_datetime
+from backend.google_api.datetime_converter import combine_date_with_time, convert_str_to_datetime
 from backend.google_api.google_route_objects import (ResponseBody, RouteLegTransitAgency,
-                                                     RouteLegTransitLine, RouteLeg, Route, RoutePlaceDetails)
-
-
-class GoogleDatetimeOption(Enum):
-    DEPARTURE_TIME = auto()
-    ARRIVAL_TIME = auto
+                                                     RouteLegTransitLine, RouteLeg, Route, RoutePlaceDetails,
+                                                     GoogleDatetimeOption)
 
 
 class GoogleRouteFinder:
@@ -38,16 +28,12 @@ class GoogleRouteFinder:
 
     GOOGLE_ROUTES_URL = "https://routes.googleapis.com/directions/v2:computeRoutes"
 
-    def __init__(self, api_key, nearest_airport_finder: NearestAirportFinder,
-                 skyscanner_flight_finder: SkyscannerFlightFinder):
+    def __init__(self, api_key):
         self.request_headers["X-Goog-Api-Key"] = api_key
-        self._airport_finder = nearest_airport_finder
-        self._flight_finder = skyscanner_flight_finder
 
     def find_routes(self, start_address: str, end_address: str, journey_datetime: str,
                     datetime_option: GoogleDatetimeOption = GoogleDatetimeOption.DEPARTURE_TIME,
-                    should_compute_alternate_routes: bool = True,
-                    should_include_flights: bool = False):
+                    should_compute_alternate_routes: bool = True):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
 
@@ -70,12 +56,10 @@ class GoogleRouteFinder:
         result = GoogleRouteFinder._clean_response_body(result.json())
         routes = GoogleRouteFinder._convert_response_body_to_routes(result)
 
-        if should_include_flights:
-            routes.append(
-                self._compute_flight_route(start_address, end_address,
-                                           convert_str_to_datetime(journey_datetime).date()))
-
-        return ResponseBody(start_address, end_address, routes)
+        return ResponseBody(start_address, end_address,
+                            convert_str_to_datetime(journey_datetime),
+                            datetime_option,
+                            routes)
 
     def _send_request(self):
         result = requests.post(self.GOOGLE_ROUTES_URL, json=self.request_body, headers=self.request_headers)
@@ -182,42 +166,3 @@ class GoogleRouteFinder:
         vehicle_type = transit_line['vehicle']['name']['text']
         transit_agencies = [RouteLegTransitAgency(t['name'], t['uri']) for t in transit_line['agencies']]
         return RouteLegTransitLine(line_name, vehicle_type, transit_agencies)
-
-    def _compute_flight_route(self, start_address: str, end_address: str, departure_date: date) -> Route:
-        departure_airport = self._airport_finder.find_nearest_airport(start_address)
-        arrival_airport = self._airport_finder.find_nearest_airport(end_address)
-
-        flight_request = SkyscannerRequest(query_legs=[QueryLeg(departure_airport.iata_code,
-                                                                arrival_airport.iata_code,
-                                                                departure_date)])
-        flight_route_leg = self._flight_finder.get(flight_request)
-        route_leg_to_departure_airport = self._compute_route_leg_to_departure_airport(start_address, flight_route_leg)
-        route_leg_from_arrival_airport = self._compute_route_leg_from_arrival_airport(end_address, flight_route_leg)
-
-        route_legs = []
-        route_legs.extend(route_leg_to_departure_airport)
-        route_legs.append(flight_route_leg)
-        route_legs.extend(route_leg_from_arrival_airport)
-
-        return Route(route_legs)
-
-    def _compute_route_leg_to_departure_airport(self, start_address: str, flight_route_leg: RouteLeg) -> list[RouteLeg]:
-        departure_hours_before_flight = 2
-
-        arrival_to_airport_datetime = (flight_route_leg.departure_datetime
-                                       - timedelta(hours=departure_hours_before_flight))
-        route_leg_to_airport = self.find_routes(start_address,
-                                                flight_route_leg.departure.name,
-                                                convert_datetime_to_str(arrival_to_airport_datetime),
-                                                GoogleDatetimeOption.ARRIVAL_TIME, False)
-        return route_leg_to_airport.routes[0].legs
-
-    def _compute_route_leg_from_arrival_airport(self, end_address: str, flight_route_leg: RouteLeg) -> list[RouteLeg]:
-        departure_minutes_after_flight = 30
-
-        departure_from_airport_datetime = (flight_route_leg.arrival_datetime +
-                                           timedelta(minutes=departure_minutes_after_flight))
-        route_leg_from_airport = self.find_routes(flight_route_leg.arrival.name,
-                                                  end_address,
-                                                  convert_datetime_to_str(departure_from_airport_datetime))
-        return route_leg_from_airport.routes[0].legs
