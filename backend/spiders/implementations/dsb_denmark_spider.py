@@ -3,7 +3,7 @@ from time import sleep
 
 from money import Money
 from scrapy.http import Response
-from selenium.common import NoSuchElementException
+from selenium.common import NoSuchElementException, WebDriverException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -55,7 +55,10 @@ class DsbDenmarkSpider(BaseSpider):
 
     @staticmethod
     def accept_cookies(driver):
-        DsbDenmarkSpider._click_button(driver, By.CLASS_NAME, "coi-banner__accept")
+        try:
+            DsbDenmarkSpider._click_button(driver, By.CLASS_NAME, "coi-banner__accept")
+        except WebDriverException:
+            pass
 
     @staticmethod
     def has_base_page_loaded(driver):

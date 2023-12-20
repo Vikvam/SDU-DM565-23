@@ -70,7 +70,7 @@ class RouteFinder:
 
         for departure, arrival in journey_names:
             yield self._crawler_process.crawl(spider,
-                                              equest=SpiderRequest(departure, arrival, route_leg.departure_datetime))
+                                              request=SpiderRequest(departure, arrival, route_leg.departure_datetime))
 
     def _find_place_names(self, place_name: str):
         names = [place_name]
