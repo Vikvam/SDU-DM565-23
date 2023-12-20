@@ -42,7 +42,7 @@ class OpenStreetMapNameResolver(NameResolverBase):
 
         place = OpenStreetMapNameResolver._get_place_of_highest_importance(result)
         place = place["namedetails"]
-        if "official_name" in result:
+        if "official_name" in place:
             return place["official_name"]
         else:
             return place["name"]

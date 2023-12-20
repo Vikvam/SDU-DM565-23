@@ -1,6 +1,7 @@
 import datetime
 from dataclasses import asdict, dataclass, field
 from datetime import date
+from time import sleep
 
 import requests
 from money import Money
@@ -83,6 +84,7 @@ class SkyscannerFlightFinder:
         while response.json()["status"] == "RESULT_STATUS_INCOMPLETE":
             # TODO?: perhaps should wait for all results > itineraries > id > pricingOptions > price > status ?
             response = self.poll_session()
+            sleep(1)
         if response.json()["status"] != "RESULT_STATUS_COMPLETE":
             raise RuntimeError(f"Skyscanner session could not be evaluated: {response.status_code}")
 

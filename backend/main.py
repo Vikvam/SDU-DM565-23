@@ -17,8 +17,8 @@ if __name__ == "__main__":
     logging.basicConfig(**get_logging_settings())
     configure_logging(install_root_handler=False)
 
-    departure = "Copenhagen Central Station"
-    arrival = "Berlin Brandenburg Gate"
+    departure = "København H"
+    arrival = "Berlin Hbf"
     departure_datetime = "2023-12-27T00:00:00Z"
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
@@ -31,5 +31,5 @@ if __name__ == "__main__":
     name_resolvers = [OpenStreetMapNameResolver()]
     finder = RouteFinder(google_finder, flight_appender, main_dispatcher, crawler_process, name_resolvers)
 
-    routes = finder.find_routes(departure, arrival, departure_datetime, False)
+    routes = finder.find_routes(departure, arrival, departure_datetime, True)
     print(routes)
