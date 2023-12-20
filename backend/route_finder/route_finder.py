@@ -1,6 +1,5 @@
 import json
 import logging
-from datetime import datetime
 from itertools import product
 from typing import Type
 
@@ -8,7 +7,7 @@ from scrapy.crawler import CrawlerProcess
 from twisted.internet import defer, reactor
 
 from backend.google_api.google_route_finder import GoogleRouteFinder
-from backend.google_api.google_route_objects import ResponseBody, Route, RouteLeg, RouteLegTransitAgency
+from backend.google_api.google_route_objects import ResponseBody, Route, RouteLeg
 from backend.json_serializer import encode_json, write_to_json_file
 from backend.name_resolvers.name_resolver_base import NameResolverBase
 from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher

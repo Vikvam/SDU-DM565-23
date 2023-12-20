@@ -3,7 +3,7 @@ from functools import lru_cache
 
 from dotenv import load_dotenv, find_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from scrapy.settings import SettingsAttribute, Settings as ScrapySettins
+from scrapy.settings import Settings as ScrapySettings
 
 load_dotenv(find_dotenv(".env"))
 
@@ -24,7 +24,7 @@ def get_settings():
 
 @lru_cache
 def get_basic_crawler_process_settings():
-    return ScrapySettins({
+    return ScrapySettings({
         "DOWNLOADER_MIDDLEWARES": {
             "backend.spiders.selenium_middleware.SeleniumMiddleware": 800,
         },

@@ -1,9 +1,8 @@
-import logging
-
-import scrapy
 from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
+
+import scrapy
 from money import Money
 
 

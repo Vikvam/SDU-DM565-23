@@ -1,4 +1,4 @@
-from datetime import datetime
+from math import nan
 from time import sleep
 
 import scrapy
@@ -7,13 +7,12 @@ from scrapy import Selector
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from math import nan
+from selenium.webdriver.support.wait import WebDriverWait
 
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
-from backend.spiders.utils import convert_price_to_money, combine_date_and_time
+from backend.spiders.utils import combine_date_and_time
 
 
 class DBSpider(BaseSpider):
