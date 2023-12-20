@@ -7,6 +7,9 @@ from scrapy.crawler import CrawlerProcess
 from starlette.responses import JSONResponse
 
 from backend.config import get_settings, get_pipeline_crawler_process_settings
+from backend.flights.nereast_airport_finder import NearestAirportFinder
+from backend.flights.skyscanner_flight_finder import SkyscannerFlightFinder
+from backend.google_api.google_geocoding import GoogleGeocoding
 from backend.google_api.google_route_finder import GoogleRouteFinder
 from backend.name_resolvers.openstreet_name_resolver import OpenStreetMapNameResolver
 from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
@@ -21,8 +24,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+google_geocoding = GoogleGeocoding(get_settings().google_maps_api_key)
+nearest_airport_finder = NearestAirportFinder(get_settings().skyscanner_api_key, google_geocoding)
+flight_finder = SkyscannerFlightFinder(get_settings().skyscanner_api_key)
+google_route_finder = GoogleRouteFinder(get_settings().google_maps_api_key, nearest_airport_finder, flight_finder)
+
 route_finder = RouteFinder(
-    GoogleRouteFinder(get_settings().google_maps_api_key),
+    google_route_finder,
     MainSpiderDispatcher(),
     CrawlerProcess(get_pipeline_crawler_process_settings()),
     [OpenStreetMapNameResolver()]
