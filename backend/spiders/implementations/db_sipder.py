@@ -61,7 +61,7 @@ class DBSpider(BaseSpider):
                 inp.clear()
                 inp.send_keys(val)
                 WebDriverWait(driver, self._timeout).until(is_stop_autocomplete_on)
-                sleep(.5)
+                sleep(1)
                 inp.send_keys([Keys.DOWN, Keys.ENTER])
 
             WebDriverWait(driver, self._timeout).until(lambda driver: not is_stop_autocomplete_on(driver))
