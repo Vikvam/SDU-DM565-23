@@ -66,10 +66,11 @@ class RouteFinder:
     def _crawl_route_step(self, route_leg: RouteLeg, spider: Type[BaseSpider]):
         departure_names = self._find_place_names(route_leg.departure.name)
         arrival_names = self._find_place_names(route_leg.arrival.name)
-        journey_names = list(product(departure_names, arrival_names))
+        journey_names = set(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
-            yield self._crawler_process.crawl(spider,
+            if departure and arrival:
+                yield self._crawler_process.crawl(spider,
                                               request=SpiderRequest(departure, arrival, route_leg.departure_datetime))
 
     def _find_place_names(self, place_name: str):
