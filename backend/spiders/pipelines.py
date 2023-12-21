@@ -17,7 +17,7 @@ class RoutePipeline:
         self._result = json.load(self._file)
 
     def process_item(self, item, spider: BaseSpider):
-        print("Pipeline:", item)
+        logging.info("Pipeline:", item)
         for route in self._result['routes']:
             for step in route['legs']:
                 if (self._is_transit_agency_name_matching(step, item) and

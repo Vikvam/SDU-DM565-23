@@ -19,7 +19,7 @@ if __name__ == "__main__":
     logging.basicConfig(**get_logging_settings())
     configure_logging(install_root_handler=False)
 
-    departure = "Berlin"
+    departure = "Frankfurt"
     arrival = "Hamburg"
     departure_datetime = "2024-01-31T00:00:00Z"
 
