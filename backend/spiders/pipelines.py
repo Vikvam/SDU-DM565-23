@@ -1,6 +1,8 @@
 import json
 import logging
 from datetime import datetime
+from typing import Optional
+from typing.io import IO
 
 from backend.google_api.datetime_converter import convert_str_to_datetime
 from backend.json_serializer import write_to_json_file
@@ -11,13 +13,16 @@ class RoutePipeline:
     def __init__(self):
         self._file = None
         self._result = {}
+        self._items = []
+        self._filename = "items.json"
 
     def open_spider(self, spider: BaseSpider):
         self._file = open("result.json", "r+")
         self._result = json.load(self._file)
 
-    def process_item(self, item, spider: BaseSpider):
-        logging.info("Pipeline:", item)
+    def process_item(self, item: SpiderItem, spider: BaseSpider):
+        print("Pipeline:", item)
+        self._items.append(item.as_dict())
         for route in self._result['routes']:
             for step in route['legs']:
                 if (self._is_transit_agency_name_matching(step, item) and
@@ -55,6 +60,38 @@ class RoutePipeline:
     def close_spider(self, spider):
         self.erase_file_content(self._file)
         write_to_json_file(self._file, self._result)
+        self._file.close()
+
+    @staticmethod
+    def erase_file_content(file):
+        file.seek(0)
+        file.truncate(0)
+
+
+class ItemPipeline:
+    _FILENAME = "items.json"
+
+    def __init__(self):
+        self._file: Optional[IO] = None
+        self._items = []
+        self._pipeline_items = {}
+
+    def open_spider(self, spider: BaseSpider):
+        self._file = open(self._FILENAME, "r+")
+        self._pipeline_items = json.load(self._file)
+
+    def process_item(self, item: SpiderItem, spider: BaseSpider):
+        print("Pipeline:", item)
+        self._items.append(item.as_dict())
+        return item
+
+    def close_spider(self, spider: BaseSpider):
+        self.erase_file_content(self._file)
+        print("Pipeline items:", self._pipeline_items, type(self._pipeline_items))
+        print(spider._request)
+        self._pipeline_items[str(spider._request)] = self._items
+        print("Pipeline items:", self._pipeline_items, type(self._pipeline_items))
+        write_to_json_file(self._file, self._pipeline_items)
         self._file.close()
 
     @staticmethod

@@ -38,7 +38,7 @@ def get_basic_crawler_process_settings():
 def get_pipeline_crawler_process_settings():
     settings = get_basic_crawler_process_settings()
     settings.set("ITEM_PIPELINES", {
-        "backend.spiders.pipelines.RoutePipeline": 900
+        "backend.spiders.pipelines.ItemPipeline": 900
     }, priority=0)
     return settings
 

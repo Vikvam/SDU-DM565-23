@@ -6,6 +6,8 @@ import scrapy
 from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
+
+from dataclasses_json import dataclass_json
 from money import Money
 from scrapy.crawler import CrawlerRunner
 from twisted.internet import reactor
@@ -13,6 +15,7 @@ from twisted.internet import reactor
 from backend.config import get_pipeline_crawler_process_settings
 
 
+@dataclass_json
 @dataclass
 class SpiderRequest:
     departure_place: str
@@ -20,6 +23,7 @@ class SpiderRequest:
     departure_datetime: datetime
 
 
+@dataclass_json
 @dataclass
 class SpiderItem:
     departure_place: str
@@ -28,6 +32,16 @@ class SpiderItem:
     arrival_datetime: datetime
     price: Money
     transport_agent_name: str
+
+    def as_dict(self):
+        return {
+            "departure_place": self.departure_place,
+            "arrival_place": self.arrival_place,
+            "departure_datetime": self.departure_datetime.isoformat(),
+            "arrival_datetime": self.arrival_datetime.isoformat(),
+            "price": {"amount": str(self.price.amount), "currency": self.price.currency},
+            "transport_agent_name": self.transport_agent_name,
+        }
 
 
 class BaseSpider(scrapy.Spider, ABC):
