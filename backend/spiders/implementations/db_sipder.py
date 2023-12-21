@@ -61,6 +61,7 @@ class DBSpider(BaseSpider):
                 inp.clear()
                 inp.send_keys(val)
                 WebDriverWait(driver, self._timeout).until(is_stop_autocomplete_on)
+                sleep(.5)
                 inp.send_keys([Keys.DOWN, Keys.ENTER])
 
             WebDriverWait(driver, self._timeout).until(lambda driver: not is_stop_autocomplete_on(driver))
@@ -86,7 +87,7 @@ class DBSpider(BaseSpider):
     def parse(self, response: scrapy.http.Response, **kwargs):
         routes_selector: [Selector] = response.css("ul.verbindung-list li")
         for route_selector in routes_selector:
-            self.parse_route(route_selector)
+            yield self.parse_route(route_selector)
 
     def parse_route(self, selector: Selector):
         price = selector.xpath(".//span[contains(@class, 'reise-preis__preis')]/text()").get()
