@@ -30,7 +30,7 @@ def get_basic_crawler_process_settings():
         },
         "SELENIUM_DRIVER_NAME": get_settings().selenium_driver_name,
         "SELENIUM_DRIVER_EXECUTABLE_PATH": get_settings().selenium_driver_executable_path,
-        "SELENIUM_DRIVER_ARGUMENTS": [],  # ["--headless"],
+        "SELENIUM_DRIVER_ARGUMENTS": ["--headless"],
         "LOG_LEVEL": "WARNING"
     }, priority=0)
 

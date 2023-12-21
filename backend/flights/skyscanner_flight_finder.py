@@ -69,6 +69,7 @@ class SkyscannerFlightFinder:
         if response.status_code != 200:
             raise RuntimeError(f"Skyscanner session could not be created: {response.status_code}")
         self.session_token = response.json()["sessionToken"]
+        print(f"Created Skyscanner session {self.session_token}")
 
     def poll_session(self) -> requests.Response:
         if self.session_token is None:
@@ -77,6 +78,8 @@ class SkyscannerFlightFinder:
             f"{self._BASE_URL}/poll/{self.session_token}",
             headers={"x-api-key": self.__api_key}
         )
+        if response.status_code != 200:
+            raise AssertionError(f"Response code from API: {response.status_code}")
         return response
 
     def await_session(self):
