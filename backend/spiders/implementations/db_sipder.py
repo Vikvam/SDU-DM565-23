@@ -61,9 +61,11 @@ class DBSpider(BaseSpider):
                 inp.clear()
                 inp.send_keys(val)
                 WebDriverWait(driver, self._timeout).until(is_stop_autocomplete_on)
+                sleep(.4)
                 inp.send_keys([Keys.DOWN, Keys.ENTER])
 
             WebDriverWait(driver, self._timeout).until(lambda driver: not is_stop_autocomplete_on(driver))
+            sleep(.4)
             search_button = WebDriverWait(driver, self._timeout).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".quick-finder-basic > button:last-of-type")))
             while driver.current_url == self._BASE_URL:
                 search_button.click()

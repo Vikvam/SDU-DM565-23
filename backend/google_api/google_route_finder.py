@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 
 from backend.google_api.datetime_converter import combine_date_with_time, convert_str_to_datetime
@@ -57,7 +59,7 @@ class GoogleRouteFinder:
         routes = GoogleRouteFinder._convert_response_body_to_routes(result)
 
         return ResponseBody(start_address, end_address,
-                            convert_str_to_datetime(journey_datetime),
+                            datetime.strptime(journey_datetime, '%Y-%m-%dT%H:%M:%S.000Z'),
                             datetime_option,
                             routes)
 

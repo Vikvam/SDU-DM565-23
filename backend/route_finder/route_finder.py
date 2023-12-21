@@ -66,7 +66,7 @@ class RouteFinder:
         # TODO: uncommented
         # departure_names = [route_leg.departure.name]
         # arrival_names = [route_leg.arrival.name]
-        journey_names = list(product(departure_names, arrival_names))
+        journey_names = set(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
             if departure and arrival:

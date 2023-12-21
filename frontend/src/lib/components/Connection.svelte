@@ -30,7 +30,7 @@
         <Text>{arrivalDatetime.time}</Text>
     </div>
     <div class="price">
-        <Text weight={"bold"}>{price}</Text>
+        <Text weight={"bold"}>{price ? `${price.amount} ${price.currency}` : "?"}</Text>
     </div>
 </div>
 

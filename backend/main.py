@@ -26,9 +26,9 @@ if __name__ == "__main__":
     # arrival = "Hamburg"
     # departure_datetime = "2024-01-31T00:00:00Z"
 
-    departure = "Odense"
+    departure = "Copenhagen"
     arrival = "Frankfurt"
-    departure_datetime = "2023-12-27T00:00:00Z"
+    departure_datetime = "2024-01-27T00:00:00Z"
 
     google_finder = GoogleRouteFinder(get_settings().google_maps_api_key)
     google_geocoding = GoogleGeocoding(get_settings().google_maps_api_key)
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     name_resolvers = [OpenStreetMapNameResolver()]
     finder = RouteFinder(google_finder, flight_appender, main_dispatcher, crawler_process, name_resolvers)
 
-    ItemPipeline.reset_pipeline()
-    routes = finder.find_routes(departure, arrival, departure_datetime, should_include_flight=False)
+    # ItemPipeline.reset_pipeline()
+    # routes = finder.find_routes(departure, arrival, departure_datetime, should_include_flight=True)
     result = ItemPipeline.finish_pipeline()
 
     with open(f"{departure}-{arrival}-result.json", "w") as f:

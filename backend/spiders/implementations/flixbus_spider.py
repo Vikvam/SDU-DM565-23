@@ -91,5 +91,5 @@ class FlixbusSpider(BaseSpider):
             convert_price_to_money(price[1:], self.DEFAULT_CURRENCY),
             self._travel_agency
         )
-        print(spider_item)
+        # print(spider_item)
         return spider_item

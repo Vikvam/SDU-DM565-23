@@ -53,14 +53,15 @@ class ItemPipeline:
 
         with open(cls._FILENAME, "r") as f: pipeline_items = json.load(f)
         with open("result.json", "r") as f: result = json.load(f)
-        print(pipeline_items)
-        print(result)
         for route in result["routes"]:
             for leg in route["legs"]:
+                departure = leg["departure"]["name"]
+                arrival = leg["arrival"]["name"]
+                departure_datetime = datetime.fromisoformat(leg["departure_datetime"])
                 request = SpiderRequest(
-                    leg["departure"]["name"],
-                    leg["arrival"]["name"],
-                    datetime.fromisoformat(leg["departure_datetime"]),
+                    departure,
+                    arrival,
+                    departure_datetime,
                 )
                 try:
                     for item in pipeline_items[str(request)]:
@@ -69,9 +70,9 @@ class ItemPipeline:
                             leg["price"] = item["price"]
                             break
                     if not leg["price"]:
-                        print(f"No item matches for {leg}")
+                        print(f"No item matches for '{departure}' - '{arrival}' at {departure_datetime}")
                 except KeyError:
                     print(f"Could not find item for {request}")
-        return pipeline_items
+        return result
 
 

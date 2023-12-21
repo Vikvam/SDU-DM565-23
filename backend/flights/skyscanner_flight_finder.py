@@ -86,7 +86,7 @@ class SkyscannerFlightFinder:
         response = self.poll_session()
         while response.json()["status"] == "RESULT_STATUS_INCOMPLETE":
             # TODO?: perhaps should wait for all results > itineraries > id > pricingOptions > price > status ?
-            sleep(.75)
+            sleep(5)
             response = self.poll_session()
         if response.json()["status"] != "RESULT_STATUS_COMPLETE":
             raise RuntimeError(f"Skyscanner session could not be evaluated: {response.status_code}")
