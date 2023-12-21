@@ -1,8 +1,6 @@
-from datetime import datetime
 from time import sleep
 
 import scrapy
-from money import Money
 from scrapy import Selector
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
@@ -11,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from backend.google_api.datetime_converter import combine_date_with_time
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import SpiderRequest, BaseSpider, SpiderItem
-from backend.spiders.utils import convert_price_to_money, combine_date_and_time
+from backend.spiders.utils import convert_price_to_money
 
 
 class FlixbusSpider(BaseSpider):

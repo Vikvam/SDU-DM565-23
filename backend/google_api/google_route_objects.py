@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum, auto
 from typing import List
 
 from money import Money
@@ -40,8 +41,14 @@ class Route:
     legs: List[RouteLeg]
 
 
+class GoogleDatetimeOption(Enum):
+    DEPARTURE_TIME = auto()
+    ARRIVAL_TIME = auto
+
 @dataclass
 class ResponseBody:
     origin_address: str
     destination_address: str
+    journey_datetime: datetime
+    journey_datetime_option: GoogleDatetimeOption
     routes: List[Route]

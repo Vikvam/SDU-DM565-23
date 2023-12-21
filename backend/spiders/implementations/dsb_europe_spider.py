@@ -3,14 +3,15 @@ from time import sleep
 
 from money import Money
 from scrapy.http import Response
+from selenium.common import WebDriverException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 from backend.google_api.datetime_converter import combine_date_with_time, convert_datetime_to_str, convert_str_to_time
 from backend.spiders.selenium_middleware import SeleniumRequest
 from backend.spiders.spider_base import BaseSpider, SpiderRequest, SpiderItem
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class DsbEuropeSpider(BaseSpider):
@@ -33,8 +34,11 @@ class DsbEuropeSpider(BaseSpider):
 
     @staticmethod
     def accept_cookies(driver):
-        accept_cookies_btn = driver.find_element(By.CLASS_NAME, "coi-banner__accept")
-        accept_cookies_btn.click()
+        try:
+            accept_cookies_btn = driver.find_element(By.CLASS_NAME, "coi-banner__accept")
+            accept_cookies_btn.click()
+        except WebDriverException:
+            pass
 
     @staticmethod
     def has_base_page_loaded(driver):

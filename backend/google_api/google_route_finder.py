@@ -1,9 +1,9 @@
-from datetime import datetime
-
 import requests
-from backend.google_api.datetime_converter import combine_date_with_time, convert_datetime_to_str
+
+from backend.google_api.datetime_converter import combine_date_with_time, convert_str_to_datetime
 from backend.google_api.google_route_objects import (ResponseBody, RouteLegTransitAgency,
-                                                     RouteLegTransitLine, RouteLeg, Route, RoutePlaceDetails)
+                                                     RouteLegTransitLine, RouteLeg, Route, RoutePlaceDetails,
+                                                     GoogleDatetimeOption)
 
 
 class GoogleRouteFinder:
@@ -20,9 +20,8 @@ class GoogleRouteFinder:
         "destination": {
             "address": ""
         },
-        "departureTime": "",
         "travelMode": "TRANSIT",
-        "computeAlternativeRoutes": "true",
+        "computeAlternativeRoutes": "",
         "languageCode": "en-GB",
         "units": "METRIC"
     }
@@ -32,10 +31,22 @@ class GoogleRouteFinder:
     def __init__(self, api_key):
         self.request_headers["X-Goog-Api-Key"] = api_key
 
-    def find_routes(self, start_address: str, end_address: str, departure_datetime: str):
+    def find_routes(self, start_address: str, end_address: str, journey_datetime: str,
+                    datetime_option: GoogleDatetimeOption = GoogleDatetimeOption.DEPARTURE_TIME,
+                    should_compute_alternate_routes: bool = True):
         self.request_body["origin"]["address"] = start_address
         self.request_body["destination"]["address"] = end_address
-        self.request_body["departureTime"] = departure_datetime
+
+        if datetime_option == GoogleDatetimeOption.DEPARTURE_TIME:
+            self.request_body["departureTime"] = journey_datetime
+            if "arrivalTime" in self.request_body:
+                del self.request_body["arrivalTime"]
+        else:
+            self.request_body["arrivalTime"] = journey_datetime
+            if "departureTime" in self.request_body:
+                del self.request_body["departureTime"]
+
+        self.request_body['computeAlternativeRoutes'] = "true" if should_compute_alternate_routes else "false"
 
         try:
             result = self._send_request()
@@ -44,7 +55,11 @@ class GoogleRouteFinder:
 
         result = GoogleRouteFinder._clean_response_body(result.json())
         routes = GoogleRouteFinder._convert_response_body_to_routes(result)
-        return ResponseBody(start_address, end_address, routes)
+
+        return ResponseBody(start_address, end_address,
+                            convert_str_to_datetime(journey_datetime),
+                            datetime_option,
+                            routes)
 
     def _send_request(self):
         result = requests.post(self.GOOGLE_ROUTES_URL, json=self.request_body, headers=self.request_headers)
@@ -113,13 +128,8 @@ class GoogleRouteFinder:
         stop_details = transit_details['stopDetails']
         localized_values = transit_details['localizedValues']
 
-        # departure_place_name = stop_details['departureStop']['name']
-        # departure_longitude = stop_details['departureStop']['location']['latLng']['longitude']
-        # departure_latitude = stop_details['departureStop']['location']['latLng']['latitude']
-        # departure = RoutePlaceDetails(departure_place_name, departure_longitude, departure_latitude)
         departure = GoogleRouteFinder._get_place_from_route_leg(stop_details['departureStop'])
         arrival = GoogleRouteFinder._get_place_from_route_leg(stop_details['arrivalStop'])
-        # arrival_place_name = stop_details['arrivalStop']['name']
 
         departure_datetime = combine_date_with_time(
             stop_details['departureTime'],
@@ -152,6 +162,7 @@ class GoogleRouteFinder:
             line_name = transit_line['nameShort']
         except KeyError:
             line_name = transit_line['name']
+
         vehicle_type = transit_line['vehicle']['name']['text']
         transit_agencies = [RouteLegTransitAgency(t['name'], t['uri']) for t in transit_line['agencies']]
         return RouteLegTransitLine(line_name, vehicle_type, transit_agencies)

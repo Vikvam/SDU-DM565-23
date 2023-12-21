@@ -7,11 +7,10 @@ from backend.name_resolvers.name_resolver_base import NameResolverBase
 
 class OpenStreetMapNameResolver(NameResolverBase):
     _url = "https://nominatim.openstreetmap.org/search?"
-    _url_params_place_name_key = "amenity"
+    _url_params_place_name_key = "q"
     _url_params = {
         "format": "json",
         "namedetails": 1,
-        "limit": 1,
         _url_params_place_name_key: ""
     }
 
@@ -20,7 +19,7 @@ class OpenStreetMapNameResolver(NameResolverBase):
 
         try:
             result = self._send_request(params)
-        except requests.exceptions.HTTPError as err:
+        except requests.exceptions.HTTPError:
             return None
 
         return self._retrieve_place_name_from_result(result)
@@ -37,12 +36,17 @@ class OpenStreetMapNameResolver(NameResolverBase):
         return res.json()
 
     @staticmethod
-    def _retrieve_place_name_from_result(result: dict) -> str | None:
+    def _retrieve_place_name_from_result(result: list) -> str | None:
         if len(result) == 0:
             return None
 
-        result = result[0]["namedetails"]
-        if "official_name" in result:
-            return result["official_name"]
+        place = OpenStreetMapNameResolver._get_place_of_highest_importance(result)
+        place = place["namedetails"]
+        if "official_name" in place:
+            return place["official_name"]
         else:
-            return result["name"]
+            return place["name"]
+
+    @staticmethod
+    def _get_place_of_highest_importance(result: list) -> dict:
+        return sorted(result, key=lambda item: float(item['importance']), reverse=True)[0]
