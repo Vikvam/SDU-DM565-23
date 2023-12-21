@@ -78,7 +78,10 @@ class ItemPipeline:
 
     def open_spider(self, spider: BaseSpider):
         self._file = open(self._FILENAME, "r+")
-        self._pipeline_items = json.load(self._file)
+        try:
+            self._pipeline_items = json.load(self._file)
+        except json.decoder.JSONDecodeError:
+            self._pipeline_items = {}
 
     def process_item(self, item: SpiderItem, spider: BaseSpider):
         print("Pipeline:", item)
@@ -87,8 +90,6 @@ class ItemPipeline:
 
     def close_spider(self, spider: BaseSpider):
         self.erase_file_content(self._file)
-        print("Pipeline items:", self._pipeline_items, type(self._pipeline_items))
-        print(spider._request)
         self._pipeline_items[str(spider._request)] = self._items
         print("Pipeline items:", self._pipeline_items, type(self._pipeline_items))
         write_to_json_file(self._file, self._pipeline_items)
@@ -98,3 +99,8 @@ class ItemPipeline:
     def erase_file_content(file):
         file.seek(0)
         file.truncate(0)
+
+    @classmethod
+    def reset_pipeline(cls):
+        with open(cls._FILENAME, "w"):
+            pass

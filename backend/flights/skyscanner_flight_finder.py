@@ -77,6 +77,8 @@ class SkyscannerFlightFinder:
             f"{self._BASE_URL}/poll/{self.session_token}",
             headers={"x-api-key": self.__api_key}
         )
+        if response.status_code != 200:
+            raise AssertionError(f"Response code from API: {response.status_code}")
         return response
 
     def await_session(self):
@@ -84,14 +86,14 @@ class SkyscannerFlightFinder:
         while response.json()["status"] == "RESULT_STATUS_INCOMPLETE":
             # TODO?: perhaps should wait for all results > itineraries > id > pricingOptions > price > status ?
             response = self.poll_session()
-            sleep(1)
+            sleep(.75)
         if response.json()["status"] != "RESULT_STATUS_COMPLETE":
             raise RuntimeError(f"Skyscanner session could not be evaluated: {response.status_code}")
-
         response_json = response.json()
         return self._process_request(response_json)
 
     def _process_request(self, response: dict) -> RouteLeg:
+        print("Skyscanner response:", response["status"])
         best_option_id = response['content']['sortingOptions']['best'][0]['itineraryId']
         response_options = response['content']['results']['itineraries']
         best_option = self._find_value_by_key_in_dict_of_dicts(response_options, best_option_id)

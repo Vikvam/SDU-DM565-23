@@ -16,7 +16,7 @@ from backend.name_resolvers.openstreet_name_resolver import OpenStreetMapNameRes
 from backend.route_finder.dispatchers.main_spider_dispatcher import MainSpiderDispatcher
 from backend.route_finder.flight_appender import FlightAppender
 from backend.route_finder.route_finder import RouteFinder
-
+from backend.spiders.pipelines import ItemPipeline
 
 if __name__ == "__main__":
     logging.basicConfig(**get_logging_settings())
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # arrival = "Hamburg"
     # departure_datetime = "2024-01-31T00:00:00Z"
 
-    departure = "København H"
+    departure = "Frankfurt"
     arrival = "Berlin Hbf"
     departure_datetime = "2023-12-27T00:00:00Z"
 
@@ -40,5 +40,7 @@ if __name__ == "__main__":
     name_resolvers = [OpenStreetMapNameResolver()]
     finder = RouteFinder(google_finder, flight_appender, main_dispatcher, crawler_process, name_resolvers)
 
+    ItemPipeline.reset_pipeline()
     routes = finder.find_routes(departure, arrival, departure_datetime)
+
     print(routes)
