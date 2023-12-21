@@ -39,13 +39,15 @@ class OpenStreetMapNameResolver(NameResolverBase):
     def _retrieve_place_name_from_result(result: list) -> str | None:
         if len(result) == 0:
             return None
-
-        place = OpenStreetMapNameResolver._get_place_of_highest_importance(result)
-        place = place["namedetails"]
-        if "official_name" in place:
-            return place["official_name"]
-        else:
-            return place["name"]
+        try:
+            place = OpenStreetMapNameResolver._get_place_of_highest_importance(result)
+            place = place["namedetails"]
+            if "official_name" in place:
+                return place["official_name"]
+            else:
+                return place["name"]
+        except:
+            return None
 
     @staticmethod
     def _get_place_of_highest_importance(result: list) -> dict:

@@ -61,18 +61,19 @@ class RouteFinder:
                     self._crawl_route_step(step, spider)
 
     def _crawl_route_step(self, route_leg: RouteLeg, spider: Type[BaseSpider]):
-        # departure_names = self._find_place_names(route_leg.departure.name)
-        # arrival_names = self._find_place_names(route_leg.arrival.name)
-        # TODO: uncomment
-        departure_names = [route_leg.departure.name]
-        arrival_names = [route_leg.arrival.name]
+        departure_names = self._find_place_names(route_leg.departure.name)
+        arrival_names = self._find_place_names(route_leg.arrival.name)
+        # TODO: uncommented
+        # departure_names = [route_leg.departure.name]
+        # arrival_names = [route_leg.arrival.name]
         journey_names = list(product(departure_names, arrival_names))
 
         for departure, arrival in journey_names:
-            print(f"From '{departure}' to '{arrival}'")
-            request = SpiderRequest(departure, arrival, route_leg.departure_datetime)
-            run_spider(spider, request)
-            self._logger.info(f"Crawled {spider.name} for {request}, {route_leg.transit_line.transit_agencies}")
+            if departure and arrival:
+                print(f"From '{departure}' to '{arrival}'")
+                request = SpiderRequest(departure, arrival, route_leg.departure_datetime)
+                run_spider(spider, request)
+                self._logger.info(f"Crawled {spider.name} for {request}, {route_leg.transit_line.transit_agencies}")
 
     def _find_place_names(self, place_name: str):
         names = [place_name]

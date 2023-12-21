@@ -69,6 +69,7 @@ class SkyscannerFlightFinder:
         if response.status_code != 200:
             raise RuntimeError(f"Skyscanner session could not be created: {response.status_code}")
         self.session_token = response.json()["sessionToken"]
+        print(f"Created session {self.session_token}")
 
     def poll_session(self) -> requests.Response:
         if self.session_token is None:
@@ -85,8 +86,8 @@ class SkyscannerFlightFinder:
         response = self.poll_session()
         while response.json()["status"] == "RESULT_STATUS_INCOMPLETE":
             # TODO?: perhaps should wait for all results > itineraries > id > pricingOptions > price > status ?
-            response = self.poll_session()
             sleep(.75)
+            response = self.poll_session()
         if response.json()["status"] != "RESULT_STATUS_COMPLETE":
             raise RuntimeError(f"Skyscanner session could not be evaluated: {response.status_code}")
         response_json = response.json()

@@ -13,17 +13,19 @@ from scrapy.crawler import CrawlerRunner
 from twisted.internet import reactor
 
 from backend.config import get_pipeline_crawler_process_settings
+from backend.google_api.datetime_converter import convert_datetime_to_str
 
 
-@dataclass_json
 @dataclass
 class SpiderRequest:
     departure_place: str
     arrival_place: str
     departure_datetime: datetime
 
+    def __str__(self):
+        return f"SpiderRequest(departure_place='{self.departure_place}', arrival_place='{self.arrival_place}', departure_datetime='{convert_datetime_to_str(self.departure_datetime)}'"
 
-@dataclass_json
+
 @dataclass
 class SpiderItem:
     departure_place: str
@@ -37,8 +39,8 @@ class SpiderItem:
         return {
             "departure_place": self.departure_place,
             "arrival_place": self.arrival_place,
-            "departure_datetime": self.departure_datetime.isoformat(),
-            "arrival_datetime": self.arrival_datetime.isoformat(),
+            "departure_datetime": convert_datetime_to_str(self.departure_datetime),
+            "arrival_datetime": convert_datetime_to_str(self.arrival_datetime),
             "price": {"amount": str(self.price.amount), "currency": self.price.currency},
             "transport_agent_name": self.transport_agent_name,
         }
